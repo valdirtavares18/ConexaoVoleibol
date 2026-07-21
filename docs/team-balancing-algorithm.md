@@ -16,21 +16,21 @@ generateFormations(input: BalancingInput, options: BalancingOptions): BalancingR
 
 **`BalancingInput`**
 
-| Campo | Descrição |
-| --- | --- |
-| `players[]` | atletas confirmados, com avaliação **oficial** já resolvida |
-| `teamCount` / `teamSize` | 3 / 6 por padrão |
-| `constraints[]` | restrições obrigatórias (`must_be_together` / `must_be_apart`) |
-| `affinities[]` | preferências direcionais (−3…+3, tipo pessoal ou tática) |
-| `locks[]` | bloqueios manuais: atleta fixado em um índice de time |
-| `lockedTeams[]` | times inteiros congelados |
-| `recentPairings` | quantas vezes cada dupla jogou junta nos últimos N eventos |
-| `requiredPositions` | posições que cada time precisa cobrir (ex.: 1 levantador) |
-| `weights` | pesos configuráveis (`club_settings`) |
-| `seed` | inteiro; controla todo o não-determinismo |
+| Campo                    | Descrição                                                      |
+| ------------------------ | -------------------------------------------------------------- |
+| `players[]`              | atletas confirmados, com avaliação **oficial** já resolvida    |
+| `teamCount` / `teamSize` | 3 / 6 por padrão                                               |
+| `constraints[]`          | restrições obrigatórias (`must_be_together` / `must_be_apart`) |
+| `affinities[]`           | preferências direcionais (−3…+3, tipo pessoal ou tática)       |
+| `locks[]`                | bloqueios manuais: atleta fixado em um índice de time          |
+| `lockedTeams[]`          | times inteiros congelados                                      |
+| `recentPairings`         | quantas vezes cada dupla jogou junta nos últimos N eventos     |
+| `requiredPositions`      | posições que cada time precisa cobrir (ex.: 1 levantador)      |
+| `weights`                | pesos configuráveis (`club_settings`)                          |
+| `seed`                   | inteiro; controla todo o não-determinismo                      |
 
 **`BalancingResult`** contém as opções geradas, cada uma com times, métricas completas,
-explicação administrativa e a *procedência* (versão, seed, pesos, parâmetros).
+explicação administrativa e a _procedência_ (versão, seed, pesos, parâmetros).
 
 **Regra de portão:** se `players.length !== teamCount * teamSize`, o algoritmo **não roda**
 no modo padrão. Retorna `InsufficientPlayersError` com a contagem esperada e a real. Só um
@@ -71,19 +71,19 @@ medem a mesma competência por ângulos diferentes. As notas por posição são 
 - impedir um time sem levantador;
 - melhorar a distribuição tática.
 
-Elas influenciam a *viabilidade tática*, não a *massa de força*.
+Elas influenciam a _viabilidade tática_, não a _massa de força_.
 
 ### 2.3 Peso dos fundamentos
 
 Pesos padrão dentro da média de fundamentos (configuráveis):
 
-| Fundamento | Peso |
-| --- | --- |
-| ataque, recepção, defesa | 1,25 |
+| Fundamento                    | Peso |
+| ----------------------------- | ---- |
+| ataque, recepção, defesa      | 1,25 |
 | saque, bloqueio, levantamento | 1,00 |
-| posicionamento, regularidade | 1,00 |
-| cobertura, condicionamento | 0,75 |
-| comunicação | 0,50 |
+| posicionamento, regularidade  | 1,00 |
+| cobertura, condicionamento    | 0,75 |
+| comunicação                   | 0,50 |
 
 ---
 
@@ -138,8 +138,8 @@ custoPosto = Σ ( max_t força_t[k] − min_t força_t[k] ),  k = 0 … teamSize
 No exemplo acima esse custo explode, enquanto para times bem distribuídos tende a zero.
 Esta é a defesa mais direta contra equilíbrio ilusório por soma.
 
-**b) Concentração de extremos.** Contagem por time de atletas *acima* de `eliteThreshold`
-(padrão 4,0) e *abaixo* de `beginnerThreshold` (padrão 2,0). O custo é a variância dessas
+**b) Concentração de extremos.** Contagem por time de atletas _acima_ de `eliteThreshold`
+(padrão 4,0) e _abaixo_ de `beginnerThreshold` (padrão 2,0). O custo é a variância dessas
 contagens entre os times.
 
 **c) Dispersão interna.** Desvio padrão interno de cada time; o custo é a dispersão desses
@@ -164,7 +164,7 @@ contribuição = intensidade × pesoDoTipo × (intensidade < 0 ? multiplicadorNe
 - `multiplicadorNegativo`: padrão **1,8** — negativas pesam mais que positivas equivalentes.
 - **Bônus mútuo**: se as duas direções têm o mesmo sinal, a contribuição do par ganha
   `+25%` (configurável).
-- Uma preferência **negativa** conta como *atendida* quando os dois ficam em times diferentes.
+- Uma preferência **negativa** conta como _atendida_ quando os dois ficam em times diferentes.
 
 O escore de afinidade é convertido em custo (`custoAfinidade = −escore`) e entra somente na
 etapa secundária — nunca pode piorar o equilíbrio além do limite (§5).
@@ -181,18 +181,18 @@ decaimento por antiguidade (evento mais recente pesa mais).
 
 Prioridade da especificação, e como cada nível é implementado:
 
-| # | Critério | Implementação |
-| --- | --- | --- |
-| 1 | Times com tamanho exato | invariante estrutural da busca |
-| 2 | Restrições obrigatórias | filtro de viabilidade |
-| 3 | Bloqueios manuais | filtro de viabilidade |
-| 4 | Cobertura de posições | penalidade de peso dominante |
-| 5 | Equilíbrio geral | objetivo primário |
-| 6 | Equilíbrio por fundamento | objetivo primário (peso menor) |
-| 7 | Distribuição alto/baixo nível | objetivo primário (peso menor) |
-| 8 | Afinidades | objetivo **secundário** |
-| 9 | Repetição de duplas | objetivo secundário |
-| 10 | Variação de parceiros/adversários | objetivo secundário |
+| #   | Critério                          | Implementação                  |
+| --- | --------------------------------- | ------------------------------ |
+| 1   | Times com tamanho exato           | invariante estrutural da busca |
+| 2   | Restrições obrigatórias           | filtro de viabilidade          |
+| 3   | Bloqueios manuais                 | filtro de viabilidade          |
+| 4   | Cobertura de posições             | penalidade de peso dominante   |
+| 5   | Equilíbrio geral                  | objetivo primário              |
+| 6   | Equilíbrio por fundamento         | objetivo primário (peso menor) |
+| 7   | Distribuição alto/baixo nível     | objetivo primário (peso menor) |
+| 8   | Afinidades                        | objetivo **secundário**        |
+| 9   | Repetição de duplas               | objetivo secundário            |
+| 10  | Variação de parceiros/adversários | objetivo secundário            |
 
 ### 5.1 Como a lexicografia é garantida na prática
 
@@ -277,15 +277,19 @@ Além da deduplicação exata, as opções retornadas precisam ter **distância 
 Todas partem do mesmo conjunto de candidatos viáveis; mudam apenas os critérios de escolha.
 
 ### Opção 1 — Equilíbrio máximo
+
 Menor `custoPrimário` absoluto, após as restrições duras. Ignora afinidade e repetição.
 
 ### Opção 2 — Equilíbrio com afinidades
+
 Entre os candidatos dentro do portão (§5.1), o de **melhor escore de afinidade**.
 
 ### Opção 3 — Variação social
+
 Entre os candidatos dentro do portão, o de **menor repetição de duplas recentes**.
 
-### Opção 4 — Cobertura de posições *(opcional)*
+### Opção 4 — Cobertura de posições _(opcional)_
+
 Entre os candidatos dentro do portão, o de melhor cobertura tática (mais posições exigidas
 cobertas, melhor nota média na posição atribuída).
 
@@ -327,10 +331,10 @@ Toda formação gerada persiste um snapshot JSON imutável:
 {
   "algorithmVersion": "cva-balance/1.0.0",
   "seed": 20260721,
-  "weights": { /* pesos efetivos usados */ },
+  "weights": {/* pesos efetivos usados */},
   "params": { "teamCount": 3, "teamSize": 6, "maxImbalancePct": 5, "gateSlackPct": 0.25 },
-  "metrics": { /* métricas completas da opção escolhida */ },
-  "inputDigest": "fnv1a128:…" // hash da entrada normalizada
+  "metrics": {/* métricas completas da opção escolhida */},
+  "inputDigest": "fnv1a128:…", // hash da entrada normalizada
 }
 ```
 
@@ -349,7 +353,7 @@ duas execuções com a mesma entrada e a mesma seed retornam resultados byte-a-b
 - **Recalcular desbloqueados**: atletas travados viram restrição dura; a busca roda apenas
   sobre os livres, com as capacidades restantes de cada time.
 - **Ajuste manual**: cada movimento (arrastar, trocar, mover por seleção) recalcula todas as
-  métricas na hora e devolve o *delta* de `diff%`, para o admin ver o impacto antes de confirmar.
+  métricas na hora e devolve o _delta_ de `diff%`, para o admin ver o impacto antes de confirmar.
 - **Versionamento**: publicar cria uma versão imutável; ajustes posteriores criam uma nova
   versão. Nenhuma versão anterior é apagada.
 
@@ -357,13 +361,13 @@ duas execuções com a mesma entrada e a mesma seed retornam resultados byte-a-b
 
 ## 11. Complexidade e desempenho
 
-| Etapa | Custo para n=18, t=3 |
-| --- | --- |
-| Cálculo de forças | O(n) |
-| Construção (68 candidatos) | O(R · n log n) |
-| 2-opt por candidato | O(passadas · n²) ≈ 10 × 108 |
-| Rotação 3-cíclica | O(passadas · n³/t) limitado por teto |
-| Canonicalização | O(C · n log n) |
+| Etapa                      | Custo para n=18, t=3                 |
+| -------------------------- | ------------------------------------ |
+| Cálculo de forças          | O(n)                                 |
+| Construção (68 candidatos) | O(R · n log n)                       |
+| 2-opt por candidato        | O(passadas · n²) ≈ 10 × 108          |
+| Rotação 3-cíclica          | O(passadas · n³/t) limitado por teto |
+| Canonicalização            | O(C · n log n)                       |
 
 Orçamento total < 50 ms em Node em hardware modesto. Há um teto duro de tempo
 (`timeBudgetMs`, padrão 750 ms) que interrompe a busca e devolve o melhor encontrado — de

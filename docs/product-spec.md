@@ -14,16 +14,16 @@ presenças, formação de times, rodízio das partidas, histórico dos jogos e o
 
 **Operação padrão de um encontro:**
 
-| Parâmetro | Valor padrão |
-| --- | --- |
-| Atletas por encontro | 18 |
-| Times | 3 |
-| Atletas por time | 6 |
-| Times em quadra | 2 (1 aguardando) |
-| Valor por atleta | R$ 10,00 |
-| Arrecadação esperada | R$ 180,00 |
-| Custo da quadra | variável — normalmente R$ 150,00 ou R$ 160,00 |
-| Destino do excedente | caixa do grupo |
+| Parâmetro            | Valor padrão                                  |
+| -------------------- | --------------------------------------------- |
+| Atletas por encontro | 18                                            |
+| Times                | 3                                             |
+| Atletas por time     | 6                                             |
+| Times em quadra      | 2 (1 aguardando)                              |
+| Valor por atleta     | R$ 10,00                                      |
+| Arrecadação esperada | R$ 180,00                                     |
+| Custo da quadra      | variável — normalmente R$ 150,00 ou R$ 160,00 |
+| Destino do excedente | caixa do grupo                                |
 
 Não existem mensalidades. Eventos extraordinários (churrasco, confraternização) têm
 cobrança personalizada.
@@ -53,34 +53,34 @@ Modelado como `user_roles` (N:N), não como coluna `role` única.
 
 ### 3.1 Matriz de permissões
 
-| Recurso | Administrador | Atleta |
-| --- | --- | --- |
-| Cadastrar/editar qualquer atleta | ✅ | ❌ (só o próprio, campos permitidos) |
-| Aprovar cadastros | ✅ | ❌ |
-| Definir avaliação oficial | ✅ | ❌ |
-| Ver avaliação oficial de terceiros | ✅ | ❌ |
-| Ver a **própria** avaliação oficial | ✅ | ❌ por padrão — liberável em `club_settings.self_official_evaluation_visible` |
-| Enviar autoavaliação | ✅ | ✅ (própria) |
-| Ver afinidades de terceiros | ✅ | ❌ |
-| Cadastrar as próprias afinidades | ✅ | ✅ |
-| Criar restrição obrigatória | ✅ | ❌ |
-| Criar/gerenciar eventos | ✅ | ❌ |
-| Confirmar/cancelar a própria presença | ✅ | ✅ |
-| Confirmar presença de terceiros | ✅ | ❌ |
-| Gerar / editar / publicar times | ✅ | ❌ |
-| Ver times publicados | ✅ | ✅ |
-| Operar rodízio e registrar resultados | ✅ | ❌ |
-| **Qualquer** recurso financeiro | ✅ | ❌ (403) |
-| Observações administrativas | ✅ | ❌ |
-| Restrições médicas de terceiros | ✅ | ❌ |
-| Auditoria | ✅ | ❌ |
-| Configurações do clube | ✅ | ❌ |
+| Recurso                               | Administrador | Atleta                                                                        |
+| ------------------------------------- | ------------- | ----------------------------------------------------------------------------- |
+| Cadastrar/editar qualquer atleta      | ✅            | ❌ (só o próprio, campos permitidos)                                          |
+| Aprovar cadastros                     | ✅            | ❌                                                                            |
+| Definir avaliação oficial             | ✅            | ❌                                                                            |
+| Ver avaliação oficial de terceiros    | ✅            | ❌                                                                            |
+| Ver a **própria** avaliação oficial   | ✅            | ❌ por padrão — liberável em `club_settings.self_official_evaluation_visible` |
+| Enviar autoavaliação                  | ✅            | ✅ (própria)                                                                  |
+| Ver afinidades de terceiros           | ✅            | ❌                                                                            |
+| Cadastrar as próprias afinidades      | ✅            | ✅                                                                            |
+| Criar restrição obrigatória           | ✅            | ❌                                                                            |
+| Criar/gerenciar eventos               | ✅            | ❌                                                                            |
+| Confirmar/cancelar a própria presença | ✅            | ✅                                                                            |
+| Confirmar presença de terceiros       | ✅            | ❌                                                                            |
+| Gerar / editar / publicar times       | ✅            | ❌                                                                            |
+| Ver times publicados                  | ✅            | ✅                                                                            |
+| Operar rodízio e registrar resultados | ✅            | ❌                                                                            |
+| **Qualquer** recurso financeiro       | ✅            | ❌ (403)                                                                      |
+| Observações administrativas           | ✅            | ❌                                                                            |
+| Restrições médicas de terceiros       | ✅            | ❌                                                                            |
+| Auditoria                             | ✅            | ❌                                                                            |
+| Configurações do clube                | ✅            | ❌                                                                            |
 
 ### 3.2 Regras invioláveis
 
 - **Não existe ranking técnico público.**
 - Times publicados **nunca** exibem notas, afinidades ou justificativas privadas.
-- Ocultar no frontend não é proteção. Toda leitura sensível passa por uma *policy* no
+- Ocultar no frontend não é proteção. Toda leitura sensível passa por uma _policy_ no
   servidor (`src/server/policies`). Um atleta que chame um endpoint financeiro recebe
   `403`, não uma lista vazia.
 - O alvo de uma afinidade **nunca** é notificado nem consegue descobrir que foi alvo.
@@ -285,12 +285,12 @@ Três times: dois jogam, um aguarda.
 
 **Sequência canônica** (A vence a partida 1):
 
-| # | Jogam | Aguarda | Observação |
-| --- | --- | --- | --- |
-| 1 | A × B | C | A vence |
-| 2 | A × C | B | A está na 2ª consecutiva |
-| 3 | B × C | A | A sai obrigatoriamente, qualquer resultado |
-| 4 | A × B | C | C sai obrigatoriamente (2ª consecutiva) |
+| #   | Jogam | Aguarda | Observação                                 |
+| --- | ----- | ------- | ------------------------------------------ |
+| 1   | A × B | C       | A vence                                    |
+| 2   | A × C | B       | A está na 2ª consecutiva                   |
+| 3   | B × C | A       | A sai obrigatoriamente, qualquer resultado |
+| 4   | A × B | C       | C sai obrigatoriamente (2ª consecutiva)    |
 
 Empate na primeira partida: o administrador escolhe quem permanece.
 Override manual: permitido, **exige justificativa** e gera registro de auditoria.
@@ -322,11 +322,11 @@ excedenteRealizado = valorRecebido   − despesasPagas
 
 Exemplos obrigatórios (cobertos por teste):
 
-| Cenário | Resultado |
-| --- | --- |
-| 18 × R$ 10,00 | R$ 180,00 esperado |
-| quadra R$ 150,00 | excedente esperado R$ 30,00 |
-| quadra R$ 160,00 | excedente esperado R$ 20,00 |
+| Cenário                 | Resultado                               |
+| ----------------------- | --------------------------------------- |
+| 18 × R$ 10,00           | R$ 180,00 esperado                      |
+| quadra R$ 150,00        | excedente esperado R$ 30,00             |
+| quadra R$ 160,00        | excedente esperado R$ 20,00             |
 | 17 pagamentos recebidos | R$ 170,00 recebidos, R$ 10,00 pendentes |
 
 ### 11.2 Pagamentos individuais
@@ -370,19 +370,19 @@ Sem integração com a API oficial do WhatsApp nesta versão.
 
 ## 13. Configurações do clube
 
-| Configuração | Valor inicial |
-| --- | --- |
-| Nome / nome curto | Conexão Voleibol Alegrete / CVA |
-| Valor por atleta | R$ 10,00 |
-| Custo padrão da quadra | R$ 150,00 |
-| Capacidade | 18 |
-| Times | 3 |
-| Atletas por time | 6 |
-| Limite de desequilíbrio | 5% |
-| Revisão de provisória | 3 participações |
-| Visibilidade da própria avaliação oficial | oculta |
-| Fuso | America/Sao_Paulo |
-| Idioma / moeda | pt-BR / BRL |
+| Configuração                              | Valor inicial                   |
+| ----------------------------------------- | ------------------------------- |
+| Nome / nome curto                         | Conexão Voleibol Alegrete / CVA |
+| Valor por atleta                          | R$ 10,00                        |
+| Custo padrão da quadra                    | R$ 150,00                       |
+| Capacidade                                | 18                              |
+| Times                                     | 3                               |
+| Atletas por time                          | 6                               |
+| Limite de desequilíbrio                   | 5%                              |
+| Revisão de provisória                     | 3 participações                 |
+| Visibilidade da própria avaliação oficial | oculta                          |
+| Fuso                                      | America/Sao_Paulo               |
+| Idioma / moeda                            | pt-BR / BRL                     |
 
 Também configuráveis: logo, pesos do algoritmo, pesos das afinidades, critérios
 obrigatórios de posição, nomes e cores dos times, horário do clube.
@@ -426,11 +426,11 @@ alternativa ao drag & drop, layout funcional a partir de ~360 px.
 
 Registradas em `docs/adr/`. Resumo:
 
-| # | Decisão |
-| --- | --- |
+| #    | Decisão                                                                         |
+| ---- | ------------------------------------------------------------------------------- |
 | 0001 | Auth própria (cookie assinado + Argon2) em vez de Supabase Auth / NextAuth beta |
-| 0002 | Autorização em *policies* TypeScript no servidor em vez de RLS |
-| 0003 | Dinheiro em centavos inteiros |
-| 0004 | Drizzle ORM com migrations SQL versionadas |
-| 0005 | PGlite para testes de integração de banco |
-| 0006 | Algoritmo de times determinístico, sem IA |
+| 0002 | Autorização em _policies_ TypeScript no servidor em vez de RLS                  |
+| 0003 | Dinheiro em centavos inteiros                                                   |
+| 0004 | Drizzle ORM com migrations SQL versionadas                                      |
+| 0005 | PGlite para testes de integração de banco                                       |
+| 0006 | Algoritmo de times determinístico, sem IA                                       |

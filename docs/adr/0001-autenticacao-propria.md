@@ -12,8 +12,8 @@ projeto, duas restrições apareceram:
    nuvem externa é mais frágil de manter para um grupo amador.
 2. **NextAuth v5 ainda está em beta** (`5.0.0-beta.32` em julho/2026; a `latest`
    estável continua sendo a v4, que não suporta App Router adequadamente). A
-   própria especificação diz: *"Não use APIs experimentais quando houver uma
-   alternativa estável"*.
+   própria especificação diz: _"Não use APIs experimentais quando houver uma
+   alternativa estável"_.
 
 ## Decisão
 
@@ -24,7 +24,7 @@ Autenticação própria:
 - **Sessão em banco + cookie assinado** (`jose`, HS256). O cookie carrega apenas
   o id da sessão; a validade é conferida no banco a cada requisição.
 - Cookie `httpOnly`, `sameSite=lax`, `secure` em produção.
-- **Rate limit no banco**, por e-mail *e* por IP.
+- **Rate limit no banco**, por e-mail _e_ por IP.
 
 O Supabase permanece no projeto como **Postgres gerenciado + Storage**.
 

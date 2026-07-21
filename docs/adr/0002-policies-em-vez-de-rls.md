@@ -4,8 +4,8 @@
 
 ## Contexto
 
-A especificação pede *"Row Level Security **ou uma camada equivalente de
-autorização**"*. As regras de acesso deste sistema não são triviais:
+A especificação pede _"Row Level Security **ou uma camada equivalente de
+autorização**"_. As regras de acesso deste sistema não são triviais:
 
 - financeiro é **totalmente** invisível a atletas (páginas, endpoints, actions,
   consultas, relatórios);
