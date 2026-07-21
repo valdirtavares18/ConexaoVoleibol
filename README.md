@@ -70,24 +70,36 @@ com 18 confirmados; e um churrasco. Contas de demonstração usam o domínio
 Os times e as partidas do seed passam pelo mesmo algoritmo e pela mesma máquina
 de rodízio da aplicação — não são dados inventados.
 
+Quando quiser sair da demonstração e usar o sistema de verdade:
+
+```bash
+npm run db:limpar-demo
+```
+
+Apaga atletas, jogos, formações, avaliações, afinidades, financeiro e auditoria,
+mas **preserva as contas reais** (com papéis e sessões ativas), as configurações
+do clube e as posições. As contas de demonstração são reconhecidas pelo domínio
+`@demo.cva.local`, que o seed usa exatamente para tornar essa separação possível.
+
 ---
 
 ## Scripts
 
-| Comando                       | O que faz                          |
-| ----------------------------- | ---------------------------------- |
-| `npm run dev`                 | Servidor de desenvolvimento        |
-| `npm run build` / `npm start` | Build e execução de produção       |
-| `npm run lint` / `lint:fix`   | ESLint                             |
-| `npm run typecheck`           | TypeScript sem emitir              |
-| `npm test`                    | Vitest (unitário + integração)     |
-| `npm run test:e2e`            | Playwright                         |
-| `npm run verify`              | lint + typecheck + test + build    |
-| `npm run db:generate`         | Gera migration a partir do schema  |
-| `npm run db:migrate`          | Aplica migrations                  |
-| `npm run db:seed`             | Seed de demonstração               |
-| `npm run db:reset`            | Esvazia o banco (pede confirmação) |
-| `npm run bootstrap:admin`     | Cria o primeiro administrador      |
+| Comando                       | O que faz                                                     |
+| ----------------------------- | ------------------------------------------------------------- |
+| `npm run dev`                 | Servidor de desenvolvimento                                   |
+| `npm run build` / `npm start` | Build e execução de produção                                  |
+| `npm run lint` / `lint:fix`   | ESLint                                                        |
+| `npm run typecheck`           | TypeScript sem emitir                                         |
+| `npm test`                    | Vitest (unitário + integração)                                |
+| `npm run test:e2e`            | Playwright                                                    |
+| `npm run verify`              | lint + typecheck + test + build                               |
+| `npm run db:generate`         | Gera migration a partir do schema                             |
+| `npm run db:migrate`          | Aplica migrations                                             |
+| `npm run db:seed`             | Seed de demonstração                                          |
+| `npm run db:limpar-demo`      | Apaga os dados de demonstração e **preserva as contas reais** |
+| `npm run db:reset`            | Esvazia o banco por completo (pede confirmação)               |
+| `npm run bootstrap:admin`     | Cria o primeiro administrador                                 |
 
 ---
 
