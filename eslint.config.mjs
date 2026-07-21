@@ -35,8 +35,8 @@ const config = [
     },
   },
   {
-    // Scripts de banco rodam em CLI: log é a interface deles.
-    files: ['src/db/scripts/**/*.ts'],
+    // Scripts de linha de comando: o log **é** a interface deles.
+    files: ['src/db/scripts/**/*.ts', 'scripts/**/*.mjs'],
     rules: { 'no-console': 'off' },
   },
 ];

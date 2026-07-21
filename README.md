@@ -157,13 +157,19 @@ Sem Docker rodando, os testes de integração são **pulados** em vez de falhare
 
 ## Identidade visual
 
-O brasão oficial precisa ser adicionado em `public/brand/` — ver
-[`public/brand/README.md`](public/brand/README.md). O sistema **não redesenha** o
-brasão; o componente `ClubMark` cuida apenas do enquadramento (proporção
-preservada, área de respiro para não cortar as três estrelas).
+Os arquivos de marca em `public/brand/` são **gerados** a partir do PDF vetorial
+oficial do brasão:
 
-Enquanto o arquivo não existir, as telas funcionam normalmente, mas o espaço do
-brasão aparece vazio.
+```bash
+node scripts/gerar-marca.mjs "caminho/para/LOGO CONEXÃO VETOR.pdf"
+```
+
+O sistema **não redesenha** o brasão — o script apenas rasteriza em alta
+resolução, recorta a margem e gera os tamanhos; o componente `ClubMark` cuida do
+enquadramento (proporção preservada, respiro para não cortar as três estrelas).
+
+Se o clube atualizar a arte, rode o comando com o PDF novo e faça commit do
+resultado. Detalhes em [`public/brand/README.md`](public/brand/README.md).
 
 ---
 

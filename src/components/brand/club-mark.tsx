@@ -1,33 +1,34 @@
 import Image from 'next/image';
+import { cn } from '@/lib/cn';
 
 /**
  * Brasão do CVA.
  *
- * O arquivo oficial vive em `public/brand/cva-logo.png` e **não é redesenhado**
- * (§15). Este componente só cuida do enquadramento correto:
+ * O arquivo é gerado a partir do PDF vetorial oficial (ver
+ * `public/brand/README.md`) e **não é redesenhado**. Este componente cuida só do
+ * enquadramento:
  *
- *  - `object-fit: contain`, proporção preservada, sem efeitos;
- *  - área de respiro suficiente para não cortar estrelas nem a borda do escudo;
- *  - variante circular para uso como avatar, com o mesmo respiro.
- *
- * Se o arquivo ainda não foi adicionado ao projeto, ver `public/brand/README.md`.
+ *  - `object-fit: contain`, proporção preservada, sem sombra nem filtro;
+ *  - área de respiro no modo circular, para não cortar as três estrelas;
+ *  - **nenhum fundo próprio** — o PNG é transparente e assenta sobre a cor de
+ *    onde estiver. Um fundo aqui criaria um quadrado de cor ligeiramente
+ *    diferente da barra em volta, que é exatamente o defeito que ele deveria
+ *    evitar.
  */
 
 type ClubMarkSize = 'sm' | 'md' | 'lg' | 'xl';
 
 const SIZES: Record<ClubMarkSize, number> = {
-  sm: 32,
-  md: 44,
+  sm: 34,
+  md: 48,
   lg: 72,
-  xl: 128,
+  xl: 132,
 };
 
 export interface ClubMarkProps {
   size?: ClubMarkSize;
   /** Recorte circular para uso como avatar. */
   circular?: boolean;
-  /** Fundo escuro atrás do brasão — o brasão original já é azul-marinho. */
-  onDark?: boolean;
   className?: string;
   priority?: boolean;
 }
@@ -35,7 +36,6 @@ export interface ClubMarkProps {
 export function ClubMark({
   size = 'md',
   circular = false,
-  onDark = false,
   className,
   priority = false,
 }: ClubMarkProps) {
@@ -43,16 +43,13 @@ export function ClubMark({
 
   return (
     <span
-      className={[
-        'inline-flex shrink-0 items-center justify-center overflow-hidden',
+      className={cn(
+        'inline-flex shrink-0 items-center justify-center',
         // O padding é a "área de respiro": impede que o recorte circular corte
         // as três estrelas do topo do brasão.
-        circular ? 'rounded-full p-[6%]' : '',
-        onDark ? 'bg-cva-navy-900' : '',
-        className ?? '',
-      ]
-        .filter(Boolean)
-        .join(' ')}
+        circular && 'overflow-hidden rounded-full p-[6%]',
+        className,
+      )}
       style={{ width: px, height: px }}
     >
       <Image
@@ -68,27 +65,37 @@ export function ClubMark({
 }
 
 /**
- * Assinatura horizontal: brasão + nome. Usada em cabeçalhos e na tela de acesso.
+ * Assinatura: brasão + nome do clube.
+ *
+ * `stacked` na barra lateral, onde a largura é curta: lado a lado, o nome
+ * quebraria em três linhas e sobraria pouco espaço para o brasão.
+ * `horizontal` nas barras superiores, onde há largura de sobra.
  */
 export function ClubWordmark({
   size = 'md',
   onDark = false,
+  orientation = 'horizontal',
 }: {
   size?: ClubMarkSize;
   onDark?: boolean;
+  orientation?: 'horizontal' | 'stacked';
 }) {
+  const stacked = orientation === 'stacked';
+
   return (
-    <span className="inline-flex items-center gap-3">
-      <ClubMark size={size} onDark={onDark} priority />
+    <span className={cn('inline-flex', stacked ? 'flex-col items-start gap-3' : 'items-center gap-3')}>
+      <ClubMark size={stacked ? 'lg' : size} priority />
       <span className="leading-tight">
         <span
-          className={`block text-sm font-semibold tracking-tight ${
-            onDark ? 'text-white' : 'text-cva-navy-900'
-          }`}
+          className={cn(
+            'block font-semibold tracking-tight',
+            stacked ? 'text-base' : 'text-sm',
+            onDark ? 'text-white' : 'text-cva-navy-900',
+          )}
         >
           Conexão Voleibol Alegrete
         </span>
-        <span className={`block text-xs ${onDark ? 'text-cva-blue-100' : 'text-cva-text-muted'}`}>
+        <span className={cn('block text-xs', onDark ? 'text-cva-blue-100' : 'text-cva-text-muted')}>
           CVA Gestão
         </span>
       </span>

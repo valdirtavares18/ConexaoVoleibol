@@ -130,7 +130,7 @@ export function AdminShell({
 
         <div className="relative">
           <div className="px-1 pb-6">
-            <ClubWordmark onDark />
+            <ClubWordmark onDark orientation="stacked" />
           </div>
           {nav}
         </div>
