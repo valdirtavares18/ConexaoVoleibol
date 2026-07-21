@@ -25,3 +25,7 @@ next-env.d.ts
 e2e/.auth/
 
 /public/uploads/
+
+# Logs do servidor iniciado em segundo plano
+dev-server.log
+dev-server-err.log
