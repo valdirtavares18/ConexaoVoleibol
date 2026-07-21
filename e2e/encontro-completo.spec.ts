@@ -23,13 +23,25 @@ test.describe.serial('encontro de ponta a ponta', () => {
     await expect(page.getByText('18/18')).toBeVisible();
   });
 
-  test('a capacidade não é ultrapassada', async ({ page }) => {
+  test('a 19ª confirmação vai para a lista de espera (§23.4)', async ({ page }) => {
     await page.goto(`/admin/eventos/${eventId}/presencas`);
-
-    // Com as 18 vagas ocupadas e todos os atletas já respondendo, não sobra
-    // ninguém para confirmar — a invariante de capacidade fica visível.
-    await expect(page.getByText('Todos os atletas do grupo já responderam.')).toBeVisible();
     await expect(page.getByText('Lista completa')).toBeVisible();
+
+    const extra = page.getByRole('button', { name: 'Confirmar' }).first();
+
+    // Só existe alguém para confirmar se outro teste tiver criado um atleta
+    // novo. Quando existe, é a oportunidade de exercitar a invariante de
+    // capacidade pela interface — e não por um texto incidental da tela.
+    if ((await extra.count()) === 0) {
+      test.skip(true, 'Nenhum atleta fora da lista nesta execução.');
+    }
+
+    await extra.click();
+    await expect(actionFeedback(page, /lista de espera/)).toBeVisible();
+
+    // A capacidade continua exatamente cheia: ninguém virou o 19º confirmado.
+    await expect(page.getByText('18/18')).toBeVisible();
+    await expect(page.getByText('Lista de espera')).toBeVisible();
   });
 
   test('gera as opções de times e publica', async ({ page }) => {

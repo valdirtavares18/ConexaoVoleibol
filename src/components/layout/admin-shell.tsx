@@ -23,7 +23,7 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { href: '/admin', label: 'Visão geral', group: 'operacao' },
-  { href: '/admin/eventos', label: 'Encontros', group: 'operacao' },
+  { href: '/admin/eventos', label: 'Jogos', group: 'operacao' },
   { href: '/admin/historico', label: 'Histórico', group: 'operacao' },
   { href: '/admin/atletas', label: 'Atletas', group: 'pessoas' },
   { href: '/admin/avaliacoes', label: 'Avaliações', group: 'pessoas' },

@@ -49,7 +49,7 @@ const STRATEGY_LABELS: Record<BalancingStrategy, string> = {
 const STRATEGY_HINTS: Record<BalancingStrategy, string> = {
   equilibrio_maximo: 'O melhor equilíbrio possível, ignorando preferências.',
   equilibrio_com_afinidades: 'Melhor combinação de preferências dentro do limite de equilíbrio.',
-  variacao_social: 'Evita repetir as duplas dos últimos encontros.',
+  variacao_social: 'Evita repetir as duplas dos últimos jogos.',
   cobertura_de_posicoes: 'Prioriza a distribuição tática mais completa.',
 };
 
@@ -101,9 +101,7 @@ export function TeamBuilder({
 
   const strengths = useMemo(
     () =>
-      teams.map((team) =>
-        team.reduce((sum, id) => sum + (playerById.get(id)?.strength ?? 0), 0),
-      ),
+      teams.map((team) => team.reduce((sum, id) => sum + (playerById.get(id)?.strength ?? 0), 0)),
     [teams, playerById],
   );
 
@@ -341,8 +339,8 @@ export function TeamBuilder({
       {selectedPlayer ? (
         <Callout tone="info">
           <strong>{playerById.get(selectedPlayer)?.displayName}</strong> selecionado. Escolha
-          &ldquo;Mover para cá&rdquo; no time de destino, ou clique em um atleta de outro time
-          para trocar os dois.
+          &ldquo;Mover para cá&rdquo; no time de destino, ou clique em um atleta de outro time para
+          trocar os dois.
         </Callout>
       ) : null}
 
@@ -356,8 +354,8 @@ export function TeamBuilder({
           <p className="text-cva-text">
             Esta opção apresenta diferença estimada de{' '}
             <strong>{option.metrics.diffPct.toFixed(1)}%</strong>.{' '}
-            {option.affinityOutcomes.filter((o) => o.satisfied).length} preferência(s) atendida(s)
-            e {option.affinityOutcomes.filter((o) => !o.satisfied).length} não atendida(s).
+            {option.affinityOutcomes.filter((o) => o.satisfied).length} preferência(s) atendida(s) e{' '}
+            {option.affinityOutcomes.filter((o) => !o.satisfied).length} não atendida(s).
           </p>
 
           {option.affinityOutcomes
@@ -367,8 +365,8 @@ export function TeamBuilder({
                 key={`${outcome.fromPlayerId}-${outcome.toPlayerId}`}
                 className="text-cva-text-muted text-xs"
               >
-                Preferência de{' '}
-                <strong>{playerById.get(outcome.fromPlayerId)?.displayName}</strong> não atendida
+                Preferência de <strong>{playerById.get(outcome.fromPlayerId)?.displayName}</strong>{' '}
+                não atendida
                 {outcome.unsatisfiedReason?.kind === 'restricao'
                   ? ' porque existe uma restrição obrigatória em sentido contrário.'
                   : outcome.unsatisfiedReason?.kind === 'bloqueio'

@@ -32,13 +32,13 @@ export default async function TimesPage() {
   if (!event || !formation) {
     return (
       <div className="flex flex-col gap-6">
-        <PageHeader title="Times" description="Os times do próximo encontro aparecem aqui." />
+        <PageHeader title="Times" description="Os times do próximo jogo aparecem aqui." />
         <EmptyState
           title="Times ainda não publicados"
           description={
             event
               ? 'Os administradores publicam os times depois que a lista de confirmados fecha.'
-              : 'Assim que houver um encontro marcado e os times forem publicados, eles aparecem aqui.'
+              : 'Assim que houver um jogo marcado e os times forem publicados, eles aparecem aqui.'
           }
           action={
             event ? (
@@ -46,7 +46,7 @@ export default async function TimesPage() {
                 href={`/app/eventos/${event.id}`}
                 className="bg-cva-navy-900 rounded-md px-4 py-2 text-sm font-semibold text-white"
               >
-                Ver o encontro
+                Ver o jogo
               </Link>
             ) : null
           }

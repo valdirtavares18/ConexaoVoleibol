@@ -11,6 +11,7 @@ import {
   PanelBody,
   PanelHeader,
 } from '@/components/ui/primitives';
+import { Select } from '@/components/ui/select';
 import { EMPTY_ACTION_STATE } from '@/lib/action-state';
 import { deleteAffinityAction, saveAffinityAction } from '@/server/actions/profile-actions';
 
@@ -95,58 +96,36 @@ export function PreferencesForm({
 
           <form action={formAction} className="flex flex-col gap-3">
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="toAthleteId" className="text-cva-text text-sm font-medium">
-                  Atleta
-                </label>
-                <select
-                  id="toAthleteId"
-                  name="toAthleteId"
-                  required
-                  className="border-cva-border-strong bg-cva-panel text-cva-text h-11 rounded-md border px-3 text-sm"
-                >
-                  <option value="">Selecione…</option>
-                  {athletes.map((athlete) => (
-                    <option key={athlete.id} value={athlete.id}>
-                      {athlete.displayName}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <Select
+                label="Atleta"
+                name="toAthleteId"
+                required
+                options={athletes.map((athlete) => ({
+                  value: athlete.id,
+                  label: athlete.displayName,
+                }))}
+              />
 
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="type" className="text-cva-text text-sm font-medium">
-                  Tipo
-                </label>
-                <select
-                  id="type"
-                  name="type"
-                  defaultValue="pessoal"
-                  className="border-cva-border-strong bg-cva-panel text-cva-text h-11 rounded-md border px-3 text-sm"
-                >
-                  <option value="pessoal">Pessoal — amizade, entrosamento</option>
-                  <option value="tatica">Tática — funciona bem em quadra</option>
-                </select>
-              </div>
+              <Select
+                label="Tipo"
+                name="type"
+                defaultValue="pessoal"
+                options={[
+                  { value: 'pessoal', label: 'Pessoal', hint: 'amizade, entrosamento' },
+                  { value: 'tatica', label: 'Tática', hint: 'funciona bem em quadra' },
+                ]}
+              />
             </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="intensity" className="text-cva-text text-sm font-medium">
-                Intensidade
-              </label>
-              <select
-                id="intensity"
-                name="intensity"
-                defaultValue="2"
-                className="border-cva-border-strong bg-cva-panel text-cva-text h-11 rounded-md border px-3 text-sm"
-              >
-                {[3, 2, 1, 0, -1, -2, -3].map((value) => (
-                  <option key={value} value={value}>
-                    {INTENSITY_LABELS[value]}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Select
+              label="Intensidade"
+              name="intensity"
+              defaultValue="2"
+              options={[3, 2, 1, 0, -1, -2, -3].map((value) => ({
+                value: String(value),
+                label: INTENSITY_LABELS[value] ?? String(value),
+              }))}
+            />
 
             <div>
               <SubmitButton />

@@ -21,18 +21,19 @@ import { CashAdjustmentForm } from './cash-adjustment-form';
 export const metadata: Metadata = { title: 'Financeiro' };
 
 const KIND_LABELS: Record<string, string> = {
-  arrecadacao_evento: 'Arrecadação de encontro',
-  despesa_evento: 'Despesa de encontro',
+  arrecadacao_evento: 'Arrecadação de jogo',
+  despesa_evento: 'Despesa de jogo',
   arrecadacao_extra: 'Arrecadação extraordinária',
   despesa_extra: 'Despesa extraordinária',
   ajuste_manual: 'Ajuste manual',
 };
 
-const FINANCIAL_STATUS: Record<string, { label: string; tone: 'neutral' | 'warning' | 'success' }> = {
-  aberto: { label: 'Aberto', tone: 'neutral' },
-  parcialmente_recebido: { label: 'Parcial', tone: 'warning' },
-  fechado: { label: 'Fechado', tone: 'success' },
-};
+const FINANCIAL_STATUS: Record<string, { label: string; tone: 'neutral' | 'warning' | 'success' }> =
+  {
+    aberto: { label: 'Aberto', tone: 'neutral' },
+    parcialmente_recebido: { label: 'Parcial', tone: 'warning' },
+    fechado: { label: 'Fechado', tone: 'success' },
+  };
 
 /**
  * Caixa do grupo (§13.4).
@@ -70,7 +71,7 @@ export default async function FinanceiroPage() {
             hint="Não entra no saldo"
             tone={cash.pendingCents > 0 ? 'negative' : 'neutral'}
           />
-          <Metric label="Encontros listados" value={events.length} />
+          <Metric label="Jogos listados" value={events.length} />
           <Metric label="Movimentos recentes" value={cash.recentTransactions.length} />
         </MetricRow>
       </Panel>
@@ -83,12 +84,12 @@ export default async function FinanceiroPage() {
       ) : null}
 
       <Panel>
-        <PanelHeader title="Encontros" description="Situação financeira de cada um." />
+        <PanelHeader title="Jogos" description="Situação financeira de cada um." />
         <PanelBody flush>
           <TableWrap>
             <THead>
               <TH width="7rem">Data</TH>
-              <TH>Encontro</TH>
+              <TH>Jogo</TH>
               <TH width="8rem" align="right">
                 Esperado
               </TH>
@@ -167,9 +168,7 @@ export default async function FinanceiroPage() {
                   <TD
                     align="right"
                     numeric
-                    className={
-                      transaction.amountCents < 0 ? 'text-cva-danger' : 'text-cva-success'
-                    }
+                    className={transaction.amountCents < 0 ? 'text-cva-danger' : 'text-cva-success'}
                   >
                     {formatCents(transaction.amountCents)}
                   </TD>

@@ -26,7 +26,7 @@ export const metadata: Metadata = { title: 'Visão geral' };
 /**
  * Painel administrativo (§17).
  *
- * Composição editorial: um painel principal com o próximo encontro — que é a
+ * Composição editorial: um painel principal com o próximo jogo — que é a
  * unidade de trabalho real do grupo — e, ao lado, as listas de pendências.
  * Não são doze cards iguais.
  */
@@ -57,7 +57,7 @@ export default async function AdminHomePage() {
             href="/admin/eventos"
             className="bg-cva-navy-900 hover:bg-cva-navy-800 rounded-md px-4 py-2 text-sm font-semibold text-white"
           >
-            Gerenciar encontros
+            Gerenciar jogos
           </Link>
         }
       />
@@ -72,7 +72,7 @@ export default async function AdminHomePage() {
                 <div className="relative flex flex-wrap items-start justify-between gap-4">
                   <div className="min-w-0">
                     <p className="text-cva-gold-500 text-xs font-semibold tracking-wider uppercase">
-                      Próximo encontro
+                      Próximo jogo
                     </p>
                     <h2 className="mt-1 text-2xl font-bold tracking-tight text-white">
                       {nextEvent.title}
@@ -164,14 +164,14 @@ export default async function AdminHomePage() {
             </Panel>
           ) : (
             <EmptyState
-              title="Nenhum encontro publicado"
-              description="Crie o próximo encontro para o grupo começar a confirmar presença."
+              title="Nenhum jogo publicado"
+              description="Crie o próximo jogo para o grupo começar a confirmar presença."
               action={
                 <Link
                   href="/admin/eventos"
                   className="bg-cva-navy-900 rounded-md px-4 py-2 text-sm font-semibold text-white"
                 >
-                  Criar encontro
+                  Criar jogo
                 </Link>
               }
             />
@@ -179,7 +179,7 @@ export default async function AdminHomePage() {
 
           <Panel>
             <PanelHeader
-              title="Últimos encontros"
+              title="Últimos jogos"
               actions={
                 <Link
                   href="/admin/historico"
@@ -192,7 +192,7 @@ export default async function AdminHomePage() {
             <PanelBody flush>
               {recentEvents.length === 0 ? (
                 <div className="text-cva-text-muted px-4 py-6 text-sm sm:px-5">
-                  Nenhum encontro finalizado ainda.
+                  Nenhum jogo finalizado ainda.
                 </div>
               ) : (
                 <ul className="divide-cva-border divide-y">

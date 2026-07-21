@@ -27,9 +27,9 @@ const REASON_LABELS: Record<string, string> = {
 };
 
 /**
- * Histórico dos encontros finalizados (§12).
+ * Histórico dos jogos finalizados (§12).
  *
- * Master-detail em vez de tabela única: cada encontro traz sua sequência de
+ * Master-detail em vez de tabela única: cada jogo traz sua sequência de
  * partidas logo abaixo, que é como o grupo lembra do que aconteceu.
  */
 export default async function AdminHistoricoPage() {
@@ -88,7 +88,10 @@ export default async function AdminHistoricoPage() {
 
   const teamRows =
     teamIds.length > 0
-      ? await db.select({ id: teams.id, name: teams.name }).from(teams).where(inArray(teams.id, teamIds))
+      ? await db
+          .select({ id: teams.id, name: teams.name })
+          .from(teams)
+          .where(inArray(teams.id, teamIds))
       : [];
 
   const teamName = new Map(teamRows.map((team) => [team.id, team.name]));
@@ -102,21 +105,19 @@ export default async function AdminHistoricoPage() {
   }
 
   const totalMatches = allMatches.length;
-  const withScore = allMatches.filter(
-    (m) => m.leftScore !== null && m.rightScore !== null,
-  ).length;
+  const withScore = allMatches.filter((m) => m.leftScore !== null && m.rightScore !== null).length;
   const overrides = allMatches.filter((m) => m.leaveReason === 'override_manual').length;
 
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Histórico"
-        description="Encontros finalizados, formações usadas e sequência de partidas."
+        description="Jogos finalizados, formações usadas e sequência de partidas."
       />
 
       <Panel>
         <MetricRow>
-          <Metric label="Encontros" value={finished.length} />
+          <Metric label="Jogos" value={finished.length} />
           <Metric label="Partidas" value={totalMatches} />
           <Metric label="Com placar anotado" value={withScore} />
           <Metric
@@ -130,8 +131,8 @@ export default async function AdminHistoricoPage() {
 
       {finished.length === 0 ? (
         <EmptyState
-          title="Nenhum encontro finalizado"
-          description="O histórico começa depois do primeiro encontro concluído no painel de quadra."
+          title="Nenhum jogo finalizado"
+          description="O histórico começa depois do primeiro jogo concluído no painel de quadra."
         />
       ) : (
         finished.map((event) => {
@@ -158,7 +159,7 @@ export default async function AdminHistoricoPage() {
               <PanelBody flush>
                 {eventMatches.length === 0 ? (
                   <p className="text-cva-text-muted px-4 py-3 text-sm sm:px-5">
-                    Nenhuma partida registrada para este encontro.
+                    Nenhuma partida registrada para este jogo.
                   </p>
                 ) : (
                   <ol className="divide-cva-border divide-y">

@@ -1,5 +1,13 @@
 import type { Metadata } from 'next';
-import { Badge, Callout, EmptyState, Panel, PanelBody, PanelHeader, PageHeader } from '@/components/ui/primitives';
+import {
+  Badge,
+  Callout,
+  EmptyState,
+  Panel,
+  PanelBody,
+  PanelHeader,
+  PageHeader,
+} from '@/components/ui/primitives';
 import { TBody, TD, TH, THead, TR, TableWrap } from '@/components/ui/table';
 import { db } from '@/db/client';
 import { getActor } from '@/server/context';

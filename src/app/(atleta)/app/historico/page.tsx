@@ -100,36 +100,36 @@ export default async function HistoricoPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="Seu histórico" description="Presença nos encontros do grupo." />
+      <PageHeader title="Seu histórico" description="Presença nos jogos do grupo." />
 
       <Panel>
         <MetricRow>
-          <Metric label="Encontros" value={finished.length} />
+          <Metric label="Jogos" value={finished.length} />
           <Metric label="Presenças" value={present} tone="positive" />
           <Metric label="Faltas" value={absent} tone={absent > 0 ? 'negative' : 'neutral'} />
           <Metric
             label="Aproveitamento"
             value={rate === null ? '—' : `${rate}%`}
-            hint={rate === null ? 'Sem encontros finalizados' : undefined}
+            hint={rate === null ? 'Sem jogos finalizados' : undefined}
           />
         </MetricRow>
       </Panel>
 
       <Panel>
-        <PanelHeader title="Encontro a encontro" />
+        <PanelHeader title="Jogo a jogo" />
         <PanelBody flush>
           {rows.length === 0 ? (
             <div className="p-4 sm:p-5">
               <EmptyState
-                title="Nenhum encontro registrado"
-                description="Seu histórico começa a aparecer depois do primeiro encontro finalizado."
+                title="Nenhum jogo registrado"
+                description="Seu histórico começa a aparecer depois do primeiro jogo finalizado."
               />
             </div>
           ) : (
             <TableWrap>
               <THead>
                 <TH width="8rem">Data</TH>
-                <TH>Encontro</TH>
+                <TH>Jogo</TH>
                 <TH align="right">Situação</TH>
               </THead>
               <TBody>
@@ -145,7 +145,7 @@ export default async function HistoricoPage() {
                       <TD>{row.title}</TD>
                       <TD align="right">
                         {row.eventStatus === 'cancelado' ? (
-                          <Badge tone="neutral">Encontro cancelado</Badge>
+                          <Badge tone="neutral">Jogo cancelado</Badge>
                         ) : (
                           <Badge
                             tone={wasPresent ? 'success' : wasAbsent ? 'danger' : 'neutral'}

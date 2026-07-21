@@ -28,10 +28,38 @@ export const signInAsAdmin = (page: Page): Promise<void> =>
 export const signInAsAthlete = (page: Page): Promise<void> =>
   signIn(page, E2E.athleteEmail, E2E.athletePassword);
 
-/** Abre a tela de presenças do encontro de teste. */
+/**
+ * Escolhe uma opção num `Select` do design system.
+ *
+ * Não é um `<select>` nativo (é o Radix, ver `components/ui/select.tsx`), então
+ * `selectOption` não funciona: é preciso abrir o gatilho e clicar no item.
+ */
+export async function chooseOption(
+  page: Page,
+  fieldLabel: string | RegExp,
+  optionName: string | RegExp,
+): Promise<void> {
+  await page.getByLabel(fieldLabel).click();
+  await page.getByRole('option', { name: optionName }).first().click();
+}
+
+/** Escolhe a primeira opção disponível de um `Select`. */
+export async function chooseFirstOption(
+  page: Page,
+  fieldLabel: string | RegExp,
+): Promise<void> {
+  await page.getByLabel(fieldLabel).click();
+  await page.getByRole('option').first().click();
+}
+
+/** Abre a tela de presenças do jogo de teste. */
 export async function openEventPresences(page: Page): Promise<string> {
   await page.goto('/admin/eventos');
-  await page.getByRole('link', { name: E2E.eventTitle }).first().click();
+  // O nome acessível do link é o título mais o horário e o local.
+  await page
+    .getByRole('link', { name: new RegExp(E2E.eventTitle) })
+    .first()
+    .click();
   await page.waitForURL(/\/admin\/eventos\/[0-9a-f-]+$/);
 
   const eventId = page.url().split('/').pop() as string;

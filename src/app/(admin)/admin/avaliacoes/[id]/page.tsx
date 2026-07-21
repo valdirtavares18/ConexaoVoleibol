@@ -10,11 +10,7 @@ import { EvaluationForm } from './evaluation-form';
 
 export const metadata: Metadata = { title: 'Avaliar atleta' };
 
-export default async function AvaliarAtletaPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function AvaliarAtletaPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const actor = await getActor();
 
@@ -81,14 +77,14 @@ export default async function AvaliarAtletaPage({
                   <p className="text-cva-text-muted mt-1 text-sm">{entry.justification}</p>
                   {entry.changes && Object.keys(entry.changes as object).length > 0 ? (
                     <ul className="text-cva-text-muted mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs">
-                      {Object.entries(entry.changes as Record<string, { anterior: unknown; novo: unknown }>).map(
-                        ([key, change]) => (
-                          <li key={key}>
-                            <span className="font-medium">{key}</span>:{' '}
-                            {String(change.anterior ?? '—')} → {String(change.novo ?? '—')}
-                          </li>
-                        ),
-                      )}
+                      {Object.entries(
+                        entry.changes as Record<string, { anterior: unknown; novo: unknown }>,
+                      ).map(([key, change]) => (
+                        <li key={key}>
+                          <span className="font-medium">{key}</span>:{' '}
+                          {String(change.anterior ?? '—')} → {String(change.novo ?? '—')}
+                        </li>
+                      ))}
                     </ul>
                   ) : null}
                 </li>

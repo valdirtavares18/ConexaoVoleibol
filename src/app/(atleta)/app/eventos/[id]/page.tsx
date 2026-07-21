@@ -19,7 +19,7 @@ import { getEvent, getMyParticipation } from '@/server/services/events';
 import { buildTeamsMessage, formatEventDate } from '@/server/services/sharing';
 import { getPublishedFormation } from '@/server/services/team-formation';
 
-export const metadata: Metadata = { title: 'Encontro' };
+export const metadata: Metadata = { title: 'Jogo' };
 
 export default async function EventoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -89,7 +89,7 @@ export default async function EventoPage({ params }: { params: Promise<{ id: str
       />
 
       {event.status === 'cancelado' ? (
-        <Callout tone="danger" title="Este encontro foi cancelado">
+        <Callout tone="danger" title="Este jogo foi cancelado">
           Fique de olho na agenda para o próximo.
         </Callout>
       ) : null}
@@ -119,7 +119,7 @@ export default async function EventoPage({ params }: { params: Promise<{ id: str
             />
           ) : (
             <p className="text-cva-text-muted text-sm">
-              As confirmações deste encontro estão encerradas.
+              As confirmações deste jogo estão encerradas.
             </p>
           )}
         </PanelBody>

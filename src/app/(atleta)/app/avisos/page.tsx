@@ -1,7 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { revalidatePath } from 'next/cache';
-import { Badge, EmptyState, Panel, PanelBody, PanelHeader, PageHeader } from '@/components/ui/primitives';
+import {
+  Badge,
+  EmptyState,
+  Panel,
+  PanelBody,
+  PanelHeader,
+  PageHeader,
+} from '@/components/ui/primitives';
 import { Button } from '@/components/ui/button';
 import { db } from '@/db/client';
 import { getActor } from '@/server/context';
@@ -11,7 +18,7 @@ export const metadata: Metadata = { title: 'Avisos' };
 
 const KIND_LABELS: Record<string, string> = {
   comunicado: 'Comunicado',
-  novo_evento: 'Novo encontro',
+  novo_evento: 'Novo jogo',
   confirmacao_presenca: 'Presença',
   lista_espera: 'Lista de espera',
   vaga_liberada: 'Vaga liberada',
@@ -72,10 +79,12 @@ export default async function AvisosPage() {
                 const content = (
                   <>
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-cva-navy-900 text-sm font-semibold">
-                        {item.title}
-                      </span>
-                      {!item.read ? <Badge tone="gold" dot>Novo</Badge> : null}
+                      <span className="text-cva-navy-900 text-sm font-semibold">{item.title}</span>
+                      {!item.read ? (
+                        <Badge tone="gold" dot>
+                          Novo
+                        </Badge>
+                      ) : null}
                       <span className="text-cva-text-muted text-xs">
                         {KIND_LABELS[item.kind] ?? item.kind}
                       </span>

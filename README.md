@@ -137,9 +137,14 @@ o gerador de times e o rodízio em milissegundos, sem banco.
 ## Testes
 
 ```bash
-npm test           # 141 testes: domínio, policies e integração com Postgres
-npm run test:e2e   # 28 testes end-to-end
+npm test           # domínio, policies e integração com Postgres
+npm run test:e2e   # end-to-end (pare o `npm run dev` antes — veja abaixo)
 ```
+
+> **Pare o servidor de desenvolvimento antes do `test:e2e`.** Os testes rodam
+> contra o build de produção, e `next dev` e `next build` escrevem na mesma
+> pasta `.next`: com os dois ativos, o servidor de produção sobe com artefatos
+> misturados e falha com `TypeError: a[d] is not a function`.
 
 Os testes de integração usam **Postgres real** (um banco por worker do Vitest),
 não um banco em memória: provar que duas confirmações simultâneas não produzem

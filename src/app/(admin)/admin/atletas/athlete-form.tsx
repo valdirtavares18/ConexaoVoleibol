@@ -5,6 +5,7 @@ import { useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
 import { Callout, Panel, PanelBody, PanelHeader } from '@/components/ui/primitives';
+import { Select } from '@/components/ui/select';
 import { DEFAULT_POSITIONS, type PositionCode } from '@/domain/positions';
 import { EMPTY_ACTION_STATE } from '@/lib/action-state';
 import { createAthleteAction, updateAthleteAction } from '@/server/actions/admin-actions';
@@ -103,22 +104,17 @@ export function AthleteForm({ initial }: { initial: AthleteFormValues }) {
               placeholder="P, M, G, GG…"
             />
 
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="status" className="text-cva-text text-sm font-medium">
-                Situação
-              </label>
-              <select
-                id="status"
-                name="status"
-                defaultValue={initial.status}
-                className="border-cva-border-strong bg-cva-panel text-cva-text h-11 rounded-md border px-3 text-sm"
-              >
-                <option value="ativo">Ativo</option>
-                <option value="lesionado">Lesionado</option>
-                <option value="afastado">Afastado</option>
-                <option value="inativo">Inativo</option>
-              </select>
-            </div>
+            <Select
+              label="Situação"
+              name="status"
+              defaultValue={initial.status}
+              options={[
+                { value: 'ativo', label: 'Ativo', hint: 'entra na escalação normalmente' },
+                { value: 'lesionado', label: 'Lesionado' },
+                { value: 'afastado', label: 'Afastado' },
+                { value: 'inativo', label: 'Inativo', hint: 'não aparece nas listagens' },
+              ]}
+            />
           </div>
         </PanelBody>
       </Panel>
@@ -129,24 +125,20 @@ export function AthleteForm({ initial }: { initial: AthleteFormValues }) {
           description="A principal alimenta a cobertura tática do gerador de times."
         />
         <PanelBody className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="primaryPosition" className="text-cva-text text-sm font-medium">
-              Posição principal
-            </label>
-            <select
-              id="primaryPosition"
-              name="primaryPosition"
-              defaultValue={initial.primaryPosition}
-              className="border-cva-border-strong bg-cva-panel text-cva-text h-11 rounded-md border px-3 text-sm sm:max-w-xs"
-            >
-              <option value="">Não definida</option>
-              {DEFAULT_POSITIONS.map((position) => (
-                <option key={position.code} value={position.code}>
-                  {position.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <Select
+            className="sm:max-w-xs"
+            label="Posição principal"
+            name="primaryPosition"
+            defaultValue={initial.primaryPosition || 'sem_posicao'}
+            options={[
+              { value: 'sem_posicao', label: 'Não definida' },
+              ...DEFAULT_POSITIONS.map((position) => ({
+                value: position.code,
+                label: position.name,
+                hint: position.description,
+              })),
+            ]}
+          />
 
           <fieldset>
             <legend className="text-cva-text text-sm font-medium">Posições secundárias</legend>

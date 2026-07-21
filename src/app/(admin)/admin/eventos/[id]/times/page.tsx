@@ -8,10 +8,7 @@ import { computeStrengths, DEFAULT_WEIGHTS } from '@/domain/team-balancing';
 import { getActor, getClubSettings, maxImbalancePct } from '@/server/context';
 import { getEvent } from '@/server/services/events';
 import { formatEventDate } from '@/server/services/sharing';
-import {
-  buildBalancingContext,
-  generateOptionsForEvent,
-} from '@/server/services/team-formation';
+import { buildBalancingContext, generateOptionsForEvent } from '@/server/services/team-formation';
 import { TeamBuilder, type BuilderPlayer } from './team-builder';
 
 export const metadata: Metadata = { title: 'Montar times' };
@@ -119,7 +116,7 @@ export default async function AdminTimesPage({
 
   const teamPresets = (settings.teamPresets as { name?: string }[] | null) ?? [];
   const teamNames = Array.from(
-    { length: event.capacity > 0 ? result.options[0]?.teams.length ?? 3 : 3 },
+    { length: event.capacity > 0 ? (result.options[0]?.teams.length ?? 3) : 3 },
     (_, index) => teamPresets[index]?.name ?? `Time ${String.fromCharCode(65 + index)}`,
   );
 
@@ -129,8 +126,8 @@ export default async function AdminTimesPage({
 
       {allowUnevenTeams ? (
         <Callout tone="warning" title="Override administrativo ativo">
-          Os times estão sendo montados com tamanhos diferentes porque o número de confirmados
-          não fecha a divisão exata.
+          Os times estão sendo montados com tamanhos diferentes porque o número de confirmados não
+          fecha a divisão exata.
         </Callout>
       ) : null}
 

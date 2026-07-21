@@ -48,7 +48,12 @@ export function SettingsForm({
         <PanelHeader title="Identidade" />
         <PanelBody>
           <div className="grid gap-4 sm:grid-cols-3">
-            <Field label="Nome do clube" name="clubName" defaultValue={settings.clubName} required />
+            <Field
+              label="Nome do clube"
+              name="clubName"
+              defaultValue={settings.clubName}
+              required
+            />
             <Field label="Nome curto" name="shortName" defaultValue={settings.shortName} required />
             <Field label="Fuso horário" name="timezone" defaultValue={settings.timezone} required />
           </div>
@@ -57,8 +62,8 @@ export function SettingsForm({
 
       <Panel>
         <PanelHeader
-          title="Encontro padrão"
-          description="Usado ao criar um novo encontro. A capacidade precisa bater com times × atletas."
+          title="Jogo padrão"
+          description="Usado ao criar um novo jogo. A capacidade precisa bater com times × atletas."
         />
         <PanelBody>
           <div className="grid gap-4 sm:grid-cols-3">
@@ -148,7 +153,7 @@ export function SettingsForm({
               min={0}
               max={20}
               defaultValue={settings.recentPairingWindow}
-              hint="Quantos encontros contam para a variação social."
+              hint="Quantos jogos contam para a variação social."
               required
             />
           </div>

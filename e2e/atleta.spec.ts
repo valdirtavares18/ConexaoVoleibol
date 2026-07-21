@@ -1,5 +1,13 @@
 import { expect, test } from '@playwright/test';
-import { ADMIN_STATE, ATHLETE_STATE, E2E, actionFeedback, formError } from './helpers';
+import {
+  ADMIN_STATE,
+  ATHLETE_STATE,
+  E2E,
+  actionFeedback,
+  chooseFirstOption,
+  chooseOption,
+  formError,
+} from './helpers';
 
 /**
  * Fluxo do atleta. Roda também em viewport de celular (ver `playwright.config.ts`),
@@ -11,8 +19,8 @@ test.describe('atleta', () => {
   test('vê o próximo encontro e responde à convocação', async ({ page }) => {
     await page.goto('/app');
 
-    await expect(page.getByText('Próximo encontro')).toBeVisible();
-    await expect(page.getByText(E2E.eventTitle)).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Seu próximo jogo' })).toBeVisible();
+    await expect(page.getByText(E2E.eventTitle).first()).toBeVisible();
 
     const confirm = page.getByRole('button', { name: 'Vou jogar' });
     const cancel = page.getByRole('button', { name: /Cancelar presença|Sair da lista/ });
@@ -63,8 +71,8 @@ test.describe('atleta', () => {
 
     await expect(page.getByText('Suas preferências são privadas')).toBeVisible();
 
-    await page.getByLabel('Atleta').selectOption({ index: 1 });
-    await page.getByLabel('Intensidade').selectOption('2');
+    await chooseFirstOption(page, 'Atleta');
+    await chooseOption(page, 'Intensidade', /Gosto de jogar junto/);
     await page.getByRole('button', { name: 'Salvar preferência' }).click();
 
     await expect(actionFeedback(page, /Preferência salva/)).toBeVisible();

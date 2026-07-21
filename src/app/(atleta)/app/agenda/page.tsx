@@ -16,7 +16,7 @@ import { formatEventDate } from '@/server/services/sharing';
 export const metadata: Metadata = { title: 'Agenda' };
 
 const TYPE_LABELS: Record<string, string> = {
-  encontro: 'Encontro',
+  encontro: 'Jogo',
   treino: 'Treino',
   amistoso: 'Amistoso',
   campeonato: 'Campeonato',
@@ -38,7 +38,7 @@ export default async function AgendaPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="Agenda" description="Próximos encontros do grupo e o que já aconteceu." />
+      <PageHeader title="Agenda" description="Próximos jogos do grupo e o que já aconteceu." />
 
       <Panel>
         <PanelHeader title="Próximos" description={`${upcoming.length} agendado(s)`} />
@@ -47,7 +47,7 @@ export default async function AgendaPage() {
             <div className="p-4 sm:p-5">
               <EmptyState
                 title="Nada marcado por enquanto"
-                description="Quando o próximo encontro for publicado, ele aparece aqui."
+                description="Quando o próximo jogo for publicado, ele aparece aqui."
               />
             </div>
           ) : (
@@ -113,7 +113,7 @@ export default async function AgendaPage() {
         <PanelBody flush>
           {past.length === 0 ? (
             <div className="text-cva-text-muted px-4 py-6 text-sm sm:px-5">
-              Ainda não há encontros passados.
+              Ainda não há jogos passados.
             </div>
           ) : (
             <ul className="divide-cva-border divide-y">

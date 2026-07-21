@@ -1,6 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Badge, Callout, Panel, PanelBody, PanelHeader, PageHeader } from '@/components/ui/primitives';
+import {
+  Badge,
+  Callout,
+  Panel,
+  PanelBody,
+  PanelHeader,
+  PageHeader,
+} from '@/components/ui/primitives';
 import { TBody, TD, TH, THead, TR, TableWrap } from '@/components/ui/table';
 import { db } from '@/db/client';
 import { POSITION_BY_CODE } from '@/domain/positions';
@@ -29,9 +36,12 @@ export default async function AvaliacoesPage() {
       />
 
       {provisionalDue.length > 0 ? (
-        <Callout tone="warning" title={`${provisionalDue.length} avaliação(ões) provisória(s) para revisar`}>
-          Estes atletas já atingiram o número de participações definido nas configurações. O
-          sistema apenas avisa — nenhuma nota muda sozinha.
+        <Callout
+          tone="warning"
+          title={`${provisionalDue.length} avaliação(ões) provisória(s) para revisar`}
+        >
+          Estes atletas já atingiram o número de participações definido nas configurações. O sistema
+          apenas avisa — nenhuma nota muda sozinha.
         </Callout>
       ) : null}
 
@@ -63,15 +73,11 @@ export default async function AvaliacoesPage() {
                   <TD>
                     <span className="text-cva-navy-900 font-medium">{athlete.fullName}</span>
                     {athlete.nickname ? (
-                      <span className="text-cva-text-muted block text-xs">
-                        {athlete.nickname}
-                      </span>
+                      <span className="text-cva-text-muted block text-xs">{athlete.nickname}</span>
                     ) : null}
                   </TD>
                   <TD className="text-cva-text-muted">
-                    {athlete.primaryPosition
-                      ? POSITION_BY_CODE[athlete.primaryPosition].name
-                      : '—'}
+                    {athlete.primaryPosition ? POSITION_BY_CODE[athlete.primaryPosition].name : '—'}
                   </TD>
                   <TD align="center" numeric>
                     {athlete.officialOverall === null ? (
@@ -96,11 +102,22 @@ export default async function AvaliacoesPage() {
                     )}
                   </TD>
                   <TD align="right">
+                    {/*
+                      Era um link sublinhado, que num final de linha de tabela
+                      parece nota de rodapé. Aqui é a ação principal da tela, e
+                      precisa ter peso de botão. Fica em dourado quando há algo
+                      pendente — sem avaliação ou provisória vencida — e neutro
+                      quando é só uma revisão opcional.
+                    */}
                     <Link
                       href={`/admin/avaliacoes/${athlete.id}`}
-                      className="text-cva-blue-700 text-sm underline underline-offset-4"
+                      className={
+                        athlete.officialOverall === null || dueIds.has(athlete.id)
+                          ? 'bg-cva-gold-500 text-cva-navy-950 hover:bg-cva-gold-600 inline-flex h-8 items-center rounded-md px-3.5 text-sm font-semibold hover:text-white'
+                          : 'border-cva-border-strong bg-cva-panel text-cva-navy-900 hover:bg-cva-blue-100/60 inline-flex h-8 items-center rounded-md border px-3.5 text-sm font-semibold'
+                      }
                     >
-                      Avaliar
+                      {athlete.officialOverall === null ? 'Avaliar' : 'Revisar'}
                     </Link>
                   </TD>
                 </TR>

@@ -18,7 +18,7 @@ import { getEventFinance } from '@/server/services/finance';
 import { formatEventDate } from '@/server/services/sharing';
 import { EventFinanceManager } from './event-finance-manager';
 
-export const metadata: Metadata = { title: 'Financeiro do encontro' };
+export const metadata: Metadata = { title: 'Financeiro do jogo' };
 
 export default async function FinanceiroEventoPage({
   params,
@@ -58,11 +58,7 @@ export default async function FinanceiroEventoPage({
             value={formatCents(settlement.expectedRevenueCents)}
             hint={`${settlement.chargedCount} atletas cobrados`}
           />
-          <Metric
-            label="Recebido"
-            value={formatCents(settlement.receivedCents)}
-            tone="positive"
-          />
+          <Metric label="Recebido" value={formatCents(settlement.receivedCents)} tone="positive" />
           <Metric
             label="Pendente"
             value={formatCents(settlement.pendingCents)}
@@ -98,11 +94,11 @@ export default async function FinanceiroEventoPage({
 
       {finance.eventFinancialStatus === 'fechado' ? (
         <Callout tone="success" title="Financeiro fechado">
-          Este encontro já foi conciliado e incorporado ao caixa.
+          Este jogo já foi conciliado e incorporado ao caixa.
         </Callout>
       ) : settlement.pendingCents === 0 && settlement.receivedCents > 0 ? (
         <Callout tone="info" title="Tudo recebido">
-          Falta apenas fechar o encontro para incorporar o resultado ao caixa.
+          Falta apenas fechar o jogo para incorporar o resultado ao caixa.
         </Callout>
       ) : null}
 
@@ -130,9 +126,9 @@ export default async function FinanceiroEventoPage({
               {settlement.chargedCount} × {formatCents(finance.valuePerAthleteCents)} ={' '}
               {formatCents(settlement.expectedRevenueCents)}
             </strong>
-            . O excedente esperado desconta o custo da quadra. Já o saldo do caixa considera
-            apenas o que entrou e saiu de fato — valores pendentes continuam pendentes e nunca
-            aparecem como dinheiro disponível.
+            . O excedente esperado desconta o custo da quadra. Já o saldo do caixa considera apenas
+            o que entrou e saiu de fato — valores pendentes continuam pendentes e nunca aparecem
+            como dinheiro disponível.
           </p>
         </PanelBody>
       </Panel>

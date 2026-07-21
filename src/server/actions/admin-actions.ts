@@ -114,7 +114,13 @@ const athleteSchema = z.object({
   status: z.enum(['ativo', 'inativo', 'afastado', 'lesionado']).optional(),
   adminNotes: z.string().trim().max(1000).optional(),
   healthRestrictions: z.string().trim().max(1000).optional(),
-  primaryPosition: z.enum(POSITION_CODES).or(z.literal('')).optional(),
+  // `sem_posicao` é o sentinela do Select: o Radix não permite item com valor
+  // vazio, então "nenhuma posição" precisa de um valor próprio.
+  primaryPosition: z
+    .enum(POSITION_CODES)
+    .or(z.literal(''))
+    .or(z.literal('sem_posicao'))
+    .optional(),
 });
 
 type ParseResult =
@@ -147,7 +153,10 @@ function parseAthleteForm(formData: FormData): ParseResult {
       status: parsed.data.status ?? 'ativo',
       adminNotes: parsed.data.adminNotes || null,
       healthRestrictions: parsed.data.healthRestrictions || null,
-      primaryPosition: parsed.data.primaryPosition || null,
+      primaryPosition:
+        parsed.data.primaryPosition && parsed.data.primaryPosition !== 'sem_posicao'
+          ? parsed.data.primaryPosition
+          : null,
       secondaryPositions: secondary,
       unwantedPositions: unwanted,
     },

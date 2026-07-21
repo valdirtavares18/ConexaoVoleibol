@@ -87,7 +87,7 @@ export function CourtPanel({ eventId, panel }: { eventId: string; panel: CourtPa
   if (panel.finished) {
     return (
       <Callout tone="success" title="Rodízio encerrado">
-        Foram {panel.history.length} partidas. O encontro está finalizado.
+        Foram {panel.history.length} partidas. O jogo está finalizado.
       </Callout>
     );
   }
@@ -141,8 +141,8 @@ export function CourtPanel({ eventId, panel }: { eventId: string; panel: CourtPa
         <PanelBody className="flex flex-col gap-4">
           {panel.forcedLeavingTeamId ? (
             <Callout tone="warning" title="Próxima troca já definida">
-              {panel.left.id === panel.forcedLeavingTeamId ? panel.left.name : panel.right.name}{' '}
-              sai ao fim desta partida — {panel.nextMatchDescription}
+              {panel.left.id === panel.forcedLeavingTeamId ? panel.left.name : panel.right.name} sai
+              ao fim desta partida — {panel.nextMatchDescription}
             </Callout>
           ) : (
             <Callout tone="info">{panel.nextMatchDescription}</Callout>
@@ -192,10 +192,20 @@ export function CourtPanel({ eventId, panel }: { eventId: string; panel: CourtPa
           </p>
 
           <div className="grid gap-2 sm:grid-cols-2">
-            <Button size="lg" variant="gold" onClick={() => finish(panel.left.id)} disabled={pending}>
+            <Button
+              size="lg"
+              variant="gold"
+              onClick={() => finish(panel.left.id)}
+              disabled={pending}
+            >
               {panel.left.name} venceu
             </Button>
-            <Button size="lg" variant="gold" onClick={() => finish(panel.right.id)} disabled={pending}>
+            <Button
+              size="lg"
+              variant="gold"
+              onClick={() => finish(panel.right.id)}
+              disabled={pending}
+            >
               {panel.right.name} venceu
             </Button>
           </div>

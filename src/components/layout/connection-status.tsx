@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 /**
  * Aviso de falta de conexão (§22).
  *
- * O ginásio do encontro tem sinal ruim, e a pessoa operando o painel de quadra
+ * O ginásio do jogo tem sinal ruim, e a pessoa operando o painel de quadra
  * precisa saber **na hora** que o "Encerrar partida" não chegou ao servidor —
  * caso contrário anota mentalmente o resultado errado e o rodízio desanda.
  *
@@ -35,10 +35,9 @@ export function ConnectionStatus() {
     <div
       role="status"
       aria-live="polite"
-      className="bg-cva-danger fixed inset-x-0 bottom-0 z-50 px-4 py-2.5 text-center text-sm font-semibold text-white sm:bottom-auto sm:top-0"
+      className="bg-cva-danger fixed inset-x-0 bottom-0 z-50 px-4 py-2.5 text-center text-sm font-semibold text-white sm:top-0 sm:bottom-auto"
     >
-      Sem conexão. O que você registrar agora <strong>não</strong> será salvo até a internet
-      voltar.
+      Sem conexão. O que você registrar agora <strong>não</strong> será salvo até a internet voltar.
     </div>
   );
 }

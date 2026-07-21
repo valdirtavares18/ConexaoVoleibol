@@ -25,7 +25,7 @@ function StatusButton({
 }
 
 /**
- * Mudança de situação do encontro.
+ * Mudança de situação do jogo.
  *
  * Cancelar é destrutivo do ponto de vista do grupo (todo mundo perde o jogo),
  * então exige confirmação explícita e motivo — que vai para a auditoria (§20).
@@ -36,7 +36,7 @@ export function EventStatusActions({ eventId, status }: { eventId: string; statu
 
   return (
     <Panel>
-      <PanelHeader title="Situação do encontro" />
+      <PanelHeader title="Situação do jogo" />
       <PanelBody className="flex flex-col gap-3">
         {state.message ? (
           <Callout tone={state.ok ? 'success' : 'danger'}>{state.message}</Callout>
@@ -46,7 +46,7 @@ export function EventStatusActions({ eventId, status }: { eventId: string; statu
           <input type="hidden" name="eventId" value={eventId} />
 
           {status === 'rascunho' ? (
-            <StatusButton status="publicado" label="Publicar encontro" variant="gold" />
+            <StatusButton status="publicado" label="Publicar jogo" variant="gold" />
           ) : null}
 
           {status === 'publicado' ? (
@@ -57,16 +57,12 @@ export function EventStatusActions({ eventId, status }: { eventId: string; statu
           ) : null}
 
           {status === 'em_andamento' ? (
-            <StatusButton status="finalizado" label="Finalizar encontro" />
+            <StatusButton status="finalizado" label="Finalizar jogo" />
           ) : null}
 
           {status !== 'cancelado' && status !== 'finalizado' ? (
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setConfirmCancel((open) => !open)}
-            >
-              {confirmCancel ? 'Manter encontro' : 'Cancelar encontro'}
+            <Button type="button" variant="ghost" onClick={() => setConfirmCancel((open) => !open)}>
+              {confirmCancel ? 'Manter jogo' : 'Cancelar jogo'}
             </Button>
           ) : null}
         </form>
@@ -76,9 +72,9 @@ export function EventStatusActions({ eventId, status }: { eventId: string; statu
             <input type="hidden" name="eventId" value={eventId} />
             <input type="hidden" name="status" value="cancelado" />
 
-            <Callout tone="danger" title="Cancelar o encontro">
-              Todo mundo que confirmou vai ver o encontro como cancelado. O motivo fica
-              registrado na auditoria.
+            <Callout tone="danger" title="Cancelar o jogo">
+              Todo mundo que confirmou vai ver o jogo como cancelado. O motivo fica registrado na
+              auditoria.
             </Callout>
 
             <label htmlFor="cancel-reason" className="text-cva-text text-sm font-medium">

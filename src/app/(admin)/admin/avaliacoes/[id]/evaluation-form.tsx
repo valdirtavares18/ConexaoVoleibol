@@ -5,7 +5,8 @@ import { useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Callout, Panel, PanelBody, PanelHeader } from '@/components/ui/primitives';
 import { SKILL_DEFINITIONS } from '@/domain/positions';
-import { RATING_VALUES, type Rating } from '@/domain/shared/rating';
+import { Select } from '@/components/ui/select';
+import { describeRating, RATING_VALUES, type Rating } from '@/domain/shared/rating';
 import { EMPTY_ACTION_STATE } from '@/lib/action-state';
 import { saveOfficialEvaluationAction } from '@/server/actions/admin-actions';
 
@@ -56,24 +57,21 @@ function RatingSelect({
   label: string;
 }) {
   return (
-    <>
-      <label className="sr-only" htmlFor={`field-${name}`}>
-        {label}
-      </label>
-      <select
-        id={`field-${name}`}
-        name={name}
-        defaultValue={defaultValue === null ? 'nao_avaliado' : String(defaultValue)}
-        className="border-cva-border-strong bg-cva-panel text-cva-text h-9 w-full rounded-md border px-2 text-sm"
-      >
-        <option value="nao_avaliado">Não avaliado</option>
-        {RATING_VALUES.map((value) => (
-          <option key={value} value={value}>
-            {value.toFixed(1)}
-          </option>
-        ))}
-      </select>
-    </>
+    <Select
+      hideLabel
+      size="sm"
+      label={label}
+      name={name}
+      defaultValue={defaultValue === null ? 'nao_avaliado' : String(defaultValue)}
+      options={[
+        { value: 'nao_avaliado', label: 'Não avaliado' },
+        ...RATING_VALUES.map((value) => ({
+          value: String(value),
+          label: value.toFixed(1),
+          hint: describeRating(value),
+        })),
+      ]}
+    />
   );
 }
 
@@ -173,22 +171,19 @@ export function EvaluationForm({
         <PanelHeader title="Registro da alteração" />
         <PanelBody className="flex flex-col gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="status" className="text-cva-text text-sm font-medium">
-                Situação da avaliação
-              </label>
-              <select
-                id="status"
-                name="status"
-                defaultValue={official?.status ?? 'provisoria'}
-                className="border-cva-border-strong bg-cva-panel text-cva-text h-11 rounded-md border px-3 text-sm"
-              >
-                <option value="provisoria">
-                  Provisória — revisar após as próximas participações
-                </option>
-                <option value="definitiva">Definitiva</option>
-              </select>
-            </div>
+            <Select
+              label="Situação da avaliação"
+              name="status"
+              defaultValue={official?.status ?? 'provisoria'}
+              options={[
+                {
+                  value: 'provisoria',
+                  label: 'Provisória',
+                  hint: 'revisar após as próximas participações',
+                },
+                { value: 'definitiva', label: 'Definitiva' },
+              ]}
+            />
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="internalNote" className="text-cva-text text-sm font-medium">
@@ -213,7 +208,7 @@ export function EvaluationForm({
               name="justification"
               required
               minLength={3}
-              placeholder="Ex.: evoluiu bastante na recepção nos últimos três encontros"
+              placeholder="Ex.: evoluiu bastante na recepção nos últimos três jogos"
               className="border-cva-border-strong bg-cva-panel h-11 rounded-md border px-3 text-sm"
             />
             <p className="text-cva-text-muted text-xs">

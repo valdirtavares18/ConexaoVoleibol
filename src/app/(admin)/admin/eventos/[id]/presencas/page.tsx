@@ -28,10 +28,7 @@ export default async function PresencasPage({ params }: { params: Promise<{ id: 
   const event = await getEvent(db, { actor, eventId: id });
   if (!event) notFound();
 
-  const [roster, athletes] = await Promise.all([
-    getRoster(db, id),
-    listAthletes(db, { actor }),
-  ]);
+  const [roster, athletes] = await Promise.all([getRoster(db, id), listAthletes(db, { actor })]);
 
   const nameOf = new Map(
     athletes.map((athlete) => [athlete.id, athlete.nickname ?? athlete.fullName]),

@@ -1,6 +1,13 @@
 import type { Metadata } from 'next';
 import { desc, eq } from 'drizzle-orm';
-import { Badge, EmptyState, Panel, PanelBody, PanelHeader, PageHeader } from '@/components/ui/primitives';
+import {
+  Badge,
+  EmptyState,
+  Panel,
+  PanelBody,
+  PanelHeader,
+  PageHeader,
+} from '@/components/ui/primitives';
 import { TBody, TD, TH, THead, TR, TableWrap } from '@/components/ui/table';
 import { db } from '@/db/client';
 import { auditLogs, users } from '@/db/schema';
@@ -74,9 +81,7 @@ export default async function AuditoriaPage() {
                     <TD className="text-cva-text">{row.actorName ?? 'Sistema'}</TD>
                     <TD>
                       <span className="text-cva-navy-900 font-medium">{row.action}</span>
-                      {SENSITIVE.has(row.action) ? (
-                        <Badge tone="warning">Sensível</Badge>
-                      ) : null}
+                      {SENSITIVE.has(row.action) ? <Badge tone="warning">Sensível</Badge> : null}
                       <span className="text-cva-text-muted block text-xs">
                         {row.entityType}
                         {row.entityId ? ` · ${row.entityId.slice(0, 8)}` : ''}

@@ -19,8 +19,8 @@ export default function NovoAtletaPage() {
       />
 
       <Callout tone="info" title="Perfil sem conta">
-        O atleta já participa de encontros, entra nos times, recebe avaliação e tem financeiro —
-        mesmo sem nunca ter criado uma conta. Se ele se cadastrar depois usando o mesmo e-mail ou
+        O atleta já participa de jogos, entra nos times, recebe avaliação e tem financeiro — mesmo
+        sem nunca ter criado uma conta. Se ele se cadastrar depois usando o mesmo e-mail ou
         telefone, o sistema propõe o vínculo em vez de criar um perfil repetido.
       </Callout>
 

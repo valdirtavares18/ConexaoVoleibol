@@ -18,7 +18,7 @@ import { getEvent, listFormationVersions } from '@/server/services/events';
 import { buildEventInviteMessage, formatEventDate } from '@/server/services/sharing';
 import { EventStatusActions } from './event-status-actions';
 
-export const metadata: Metadata = { title: 'Encontro' };
+export const metadata: Metadata = { title: 'Jogo' };
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
 
@@ -50,7 +50,7 @@ export default async function AdminEventoPage({ params }: { params: Promise<{ id
       <PageHeader
         eyebrow={
           <Link href="/admin/eventos" className="hover:underline">
-            ← Encontros
+            ← Jogos
           </Link>
         }
         title={event.title}
@@ -91,16 +91,28 @@ export default async function AdminEventoPage({ params }: { params: Promise<{ id
 
       {event.formationNeedsReview ? (
         <Callout tone="warning" title="A formação publicada precisa de revisão">
-          Alguém cancelou depois da publicação. Revise os times antes do encontro.
+          Alguém cancelou depois da publicação. Revise os times antes do jogo.
         </Callout>
       ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          { href: `/admin/eventos/${id}/presencas`, label: 'Presenças', hint: 'Confirmar, cancelar e reordenar a fila' },
+          {
+            href: `/admin/eventos/${id}/presencas`,
+            label: 'Presenças',
+            hint: 'Confirmar, cancelar e reordenar a fila',
+          },
           { href: `/admin/eventos/${id}/times`, label: 'Times', hint: 'Gerar, ajustar e publicar' },
-          { href: `/admin/eventos/${id}/quadra`, label: 'Painel de quadra', hint: 'Rodízio durante o encontro' },
-          { href: `/admin/financeiro/eventos/${id}`, label: 'Financeiro', hint: 'Cobranças e fechamento' },
+          {
+            href: `/admin/eventos/${id}/quadra`,
+            label: 'Painel de quadra',
+            hint: 'Rodízio durante o jogo',
+          },
+          {
+            href: `/admin/financeiro/eventos/${id}`,
+            label: 'Financeiro',
+            hint: 'Cobranças e fechamento',
+          },
         ].map((item) => (
           <Link
             key={item.href}

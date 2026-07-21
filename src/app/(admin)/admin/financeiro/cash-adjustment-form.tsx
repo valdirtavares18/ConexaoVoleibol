@@ -5,6 +5,7 @@ import { useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
 import { Callout, Panel, PanelBody, PanelHeader } from '@/components/ui/primitives';
+import { Select } from '@/components/ui/select';
 import { EMPTY_ACTION_STATE } from '@/lib/action-state';
 import { addCashAdjustmentAction } from '@/server/actions/admin-actions';
 
@@ -42,7 +43,7 @@ export function CashAdjustmentForm() {
     <Panel>
       <PanelHeader
         title="Ajuste manual de caixa"
-        description="Use para corrigir divergências ou registrar entradas e saídas fora dos encontros."
+        description="Use para corrigir divergências ou registrar entradas e saídas fora dos jogos."
         actions={
           <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
             Fechar
@@ -58,20 +59,15 @@ export function CashAdjustmentForm() {
 
         <form action={formAction} className="flex flex-col gap-4">
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="direction" className="text-cva-text text-sm font-medium">
-                Tipo
-              </label>
-              <select
-                id="direction"
-                name="direction"
-                defaultValue="entrada"
-                className="border-cva-border-strong bg-cva-panel text-cva-text h-11 rounded-md border px-3 text-sm"
-              >
-                <option value="entrada">Entrada no caixa</option>
-                <option value="saida">Saída do caixa</option>
-              </select>
-            </div>
+            <Select
+              label="Tipo"
+              name="direction"
+              defaultValue="entrada"
+              options={[
+                { value: 'entrada', label: 'Entrada no caixa' },
+                { value: 'saida', label: 'Saída do caixa' },
+              ]}
+            />
 
             <Field
               label="Valor (R$)"

@@ -14,7 +14,7 @@ export default async function ConfiguracoesPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Configurações do clube"
-        description="Os padrões usados em novos encontros e no gerador de times."
+        description="Os padrões usados em novos jogos e no gerador de times."
       />
 
       <SettingsForm
@@ -44,9 +44,7 @@ export default async function ConfiguracoesPage() {
               ['Custo padrão da quadra', formatCents(cents(settings.defaultCourtCostCents))],
               [
                 'Arrecadação esperada',
-                formatCents(
-                  cents(settings.defaultValuePerAthleteCents * settings.defaultCapacity),
-                ),
+                formatCents(cents(settings.defaultValuePerAthleteCents * settings.defaultCapacity)),
               ],
               [
                 'Excedente esperado',
@@ -59,10 +57,7 @@ export default async function ConfiguracoesPage() {
               ],
               ['Formato', `${settings.defaultTeamCount} times de ${settings.defaultTeamSize}`],
               ['Limite de desequilíbrio', `${settings.maxImbalanceBasisPoints / 100}%`],
-              [
-                'Partidas consecutivas',
-                `no máximo ${settings.maxConsecutiveMatches} seguidas`,
-              ],
+              ['Partidas consecutivas', `no máximo ${settings.maxConsecutiveMatches} seguidas`],
               [
                 'Revisão de provisória',
                 `após ${settings.provisionalReviewAfterEvents} participações`,

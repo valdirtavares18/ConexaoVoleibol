@@ -3,7 +3,14 @@
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
-import { Badge, Callout, EmptyState, Panel, PanelBody, PanelHeader } from '@/components/ui/primitives';
+import {
+  Badge,
+  Callout,
+  EmptyState,
+  Panel,
+  PanelBody,
+  PanelHeader,
+} from '@/components/ui/primitives';
 import { reorderWaitlistAction, respondToEventAction } from '@/server/actions/attendance-actions';
 
 /**
@@ -96,10 +103,7 @@ export function AttendanceManager({
       ) : null}
 
       <Panel>
-        <PanelHeader
-          title="Confirmados"
-          description={`${confirmed.length} de ${capacity} vagas`}
-        />
+        <PanelHeader title="Confirmados" description={`${confirmed.length} de ${capacity} vagas`} />
         <PanelBody flush>
           {confirmed.length === 0 ? (
             <div className="p-4 sm:p-5">

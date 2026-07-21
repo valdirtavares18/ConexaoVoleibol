@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useActionState, useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge, Callout, Panel, PanelBody, PanelHeader } from '@/components/ui/primitives';
+import { Select } from '@/components/ui/select';
 import { TBody, TD, TH, THead, TR, TableWrap } from '@/components/ui/table';
 import { EMPTY_ACTION_STATE } from '@/lib/action-state';
 import {
@@ -23,7 +24,10 @@ interface Line {
   paidLabel: string;
 }
 
-const STATUS: Record<string, { label: string; tone: 'neutral' | 'success' | 'warning' | 'danger' }> = {
+const STATUS: Record<
+  string,
+  { label: string; tone: 'neutral' | 'success' | 'warning' | 'danger' }
+> = {
   pendente: { label: 'Pendente', tone: 'warning' },
   pago: { label: 'Pago', tone: 'success' },
   parcial: { label: 'Parcial', tone: 'warning' },
@@ -32,7 +36,7 @@ const STATUS: Record<string, { label: string; tone: 'neutral' | 'success' | 'war
 };
 
 /**
- * Cobranças de um encontro (§13.2).
+ * Cobranças de um jogo (§13.2).
  *
  * O botão de "marcar como pago" preenche o valor devido — que é o caso comum,
  * já que quase todo mundo paga o valor cheio em Pix na hora. Pagamento parcial
@@ -46,7 +50,7 @@ export function EventFinanceManager({
 }: {
   eventId: string;
   lines: Line[];
-  /** Situação persistida do encontro, não a completude dos pagamentos. */
+  /** Situação persistida do jogo, não a completude dos pagamentos. */
   eventFinancialStatus: 'aberto' | 'parcialmente_recebido' | 'fechado';
   courtCostPaid: boolean;
 }) {
@@ -136,7 +140,10 @@ export function EventFinanceManager({
                       </TD>
                       <TD align="right">
                         {remaining > 0 ? (
-                          <form action={paymentAction} className="flex items-center justify-end gap-1.5">
+                          <form
+                            action={paymentAction}
+                            className="flex items-center justify-end gap-1.5"
+                          >
                             <input type="hidden" name="eventId" value={eventId} />
                             <input type="hidden" name="athleteId" value={line.athleteId} />
                             <label className="sr-only" htmlFor={`amount-${line.athleteId}`}>
@@ -152,19 +159,19 @@ export function EventFinanceManager({
                               defaultValue={remaining.toFixed(2)}
                               className="border-cva-border-strong bg-cva-panel h-8 w-20 rounded-md border px-2 text-right text-sm"
                             />
-                            <label className="sr-only" htmlFor={`method-${line.athleteId}`}>
-                              Método
-                            </label>
-                            <select
-                              id={`method-${line.athleteId}`}
+                            <Select
+                              hideLabel
+                              size="sm"
+                              className="w-28"
+                              label={`Método do pagamento de ${line.displayName}`}
                               name="method"
                               defaultValue="pix"
-                              className="border-cva-border-strong bg-cva-panel h-8 rounded-md border px-1.5 text-sm"
-                            >
-                              <option value="pix">Pix</option>
-                              <option value="dinheiro">Dinheiro</option>
-                              <option value="outro">Outro</option>
-                            </select>
+                              options={[
+                                { value: 'pix', label: 'Pix' },
+                                { value: 'dinheiro', label: 'Dinheiro' },
+                                { value: 'outro', label: 'Outro' },
+                              ]}
+                            />
                             <Button type="submit" size="sm" variant="secondary">
                               Receber
                             </Button>
@@ -188,16 +195,19 @@ export function EventFinanceManager({
                           >
                             <input type="hidden" name="eventId" value={eventId} />
                             <input type="hidden" name="athleteId" value={line.athleteId} />
-                            <select
+                            <Select
+                              hideLabel
+                              size="sm"
+                              className="w-40"
+                              label={`Ajuste da cobrança de ${line.displayName}`}
                               name="status"
                               defaultValue="dispensado"
-                              aria-label="Novo status"
-                              className="border-cva-border-strong bg-cva-panel h-8 rounded-md border px-1.5 text-sm"
-                            >
-                              <option value="dispensado">Dispensar</option>
-                              <option value="estornado">Estornar</option>
-                              <option value="pendente">Reabrir</option>
-                            </select>
+                              options={[
+                                { value: 'dispensado', label: 'Dispensar' },
+                                { value: 'estornado', label: 'Estornar' },
+                                { value: 'pendente', label: 'Reabrir' },
+                              ]}
+                            />
                             <input
                               name="reason"
                               required
@@ -224,7 +234,7 @@ export function EventFinanceManager({
       {lines.length > 0 && eventFinancialStatus !== 'fechado' ? (
         <Panel>
           <PanelHeader
-            title="Fechar o encontro"
+            title="Fechar o jogo"
             description="Incorpora ao caixa apenas o que foi efetivamente recebido e pago."
           />
           <PanelBody>
@@ -237,7 +247,7 @@ export function EventFinanceManager({
                   name="courtCostPaid"
                   // Já registrado como pago: vem marcado e o texto reflete isso.
                   // Ainda não pago: vem marcado mesmo assim, porque fechar o
-                  // encontro normalmente acontece depois de acertar a quadra.
+                  // jogo normalmente acontece depois de acertar a quadra.
                   defaultChecked
                   className="accent-cva-navy-900 size-4"
                 />

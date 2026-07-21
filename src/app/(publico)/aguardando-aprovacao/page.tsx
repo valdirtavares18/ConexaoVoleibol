@@ -38,7 +38,7 @@ export default async function AguardandoAprovacaoPage() {
             ? 'Seu cadastro não foi aprovado. Se acha que houve engano, procure alguém da organização do grupo.'
             : needsChanges
               ? 'Um administrador pediu ajustes no seu cadastro. Procure alguém da organização para saber o que falta.'
-              : 'Seu cadastro foi enviado e está aguardando a aprovação de um administrador do CVA. Assim que for liberado, você consegue confirmar presença nos encontros.'}
+              : 'Seu cadastro foi enviado e está aguardando a aprovação de um administrador do CVA. Assim que for liberado, você consegue confirmar presença nos jogos.'}
         </p>
 
         <div className="mt-8">

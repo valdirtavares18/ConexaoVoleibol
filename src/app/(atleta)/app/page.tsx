@@ -26,7 +26,7 @@ export const metadata: Metadata = { title: 'Início' };
  * Painel do atleta (§17).
  *
  * Não é uma grade de widgets: é uma visão operacional em ordem de urgência —
- * o próximo encontro e a ação de confirmar vêm primeiro, porque é para isso que
+ * o próximo jogo e a ação de confirmar vêm primeiro, porque é para isso que
  * o atleta abre o app.
  */
 export default async function AppHomePage() {
@@ -64,7 +64,7 @@ export default async function AppHomePage() {
             <div className="relative flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-cva-gold-500 text-xs font-semibold tracking-wider uppercase">
-                  Próximo encontro
+                  Próximo jogo
                 </p>
                 <h2 className="mt-1 text-2xl font-bold tracking-tight text-white">
                   {nextEvent.title}
@@ -111,7 +111,7 @@ export default async function AppHomePage() {
                 </Badge>
               ) : status === 'nao_participa' ? (
                 <Badge tone="neutral" dot>
-                  Você não vai a este encontro
+                  Você não vai a este jogo
                 </Badge>
               ) : (
                 <Badge tone="gold" dot>
@@ -138,8 +138,8 @@ export default async function AppHomePage() {
         </Panel>
       ) : (
         <EmptyState
-          title="Nenhum encontro marcado"
-          description="Assim que um administrador publicar o próximo encontro, ele aparece aqui para você confirmar."
+          title="Nenhum jogo marcado"
+          description="Assim que um administrador publicar o próximo jogo, ele aparece aqui para você confirmar."
         />
       )}
 
@@ -192,7 +192,7 @@ export default async function AppHomePage() {
       {/* ---- Histórico recente ---------------------------------------------- */}
       <Panel>
         <PanelHeader
-          title="Encontros recentes"
+          title="Jogos recentes"
           actions={
             <Link
               href="/app/historico"
@@ -205,7 +205,7 @@ export default async function AppHomePage() {
         <PanelBody flush>
           {recent.length === 0 ? (
             <div className="text-cva-text-muted px-4 py-6 text-sm sm:px-5">
-              Ainda não há encontros finalizados.
+              Ainda não há jogos finalizados.
             </div>
           ) : (
             <ul className="divide-cva-border divide-y">

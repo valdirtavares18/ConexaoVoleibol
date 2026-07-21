@@ -5,6 +5,7 @@ import { useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
 import { Callout, Panel, PanelBody, PanelHeader } from '@/components/ui/primitives';
+import { Select } from '@/components/ui/select';
 import { EMPTY_ACTION_STATE } from '@/lib/action-state';
 import { createEventAction } from '@/server/actions/admin-actions';
 
@@ -12,15 +13,15 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" variant="gold" disabled={pending}>
-      {pending ? 'Criando…' : 'Criar encontro'}
+      {pending ? 'Criando…' : 'Criar jogo'}
     </Button>
   );
 }
 
 /**
- * Criação de encontro.
+ * Criação de jogo.
  *
- * Fica recolhido por padrão: a tela de encontros é usada muito mais para
+ * Fica recolhido por padrão: a tela de jogos é usada muito mais para
  * consultar do que para criar, e um formulário sempre aberto empurraria a lista
  * para baixo da dobra.
  */
@@ -32,7 +33,7 @@ export function NewEventForm() {
     return (
       <div>
         <Button variant="gold" onClick={() => setOpen(true)}>
-          Novo encontro
+          Novo jogo
         </Button>
       </div>
     );
@@ -41,7 +42,7 @@ export function NewEventForm() {
   return (
     <Panel>
       <PanelHeader
-        title="Novo encontro"
+        title="Novo jogo"
         description="Os valores em branco usam os padrões do clube."
         actions={
           <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
@@ -58,26 +59,21 @@ export function NewEventForm() {
 
         <form action={formAction} className="flex flex-col gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Título" name="title" required defaultValue="Encontro de quarta" />
+            <Field label="Título" name="title" required defaultValue="Jogo de quarta" />
 
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="type" className="text-cva-text text-sm font-medium">
-                Tipo
-              </label>
-              <select
-                id="type"
-                name="type"
-                defaultValue="encontro"
-                className="border-cva-border-strong bg-cva-panel text-cva-text h-11 rounded-md border px-3 text-sm"
-              >
-                <option value="encontro">Encontro de vôlei</option>
-                <option value="treino">Treino</option>
-                <option value="amistoso">Amistoso</option>
-                <option value="campeonato">Campeonato</option>
-                <option value="confraternizacao">Confraternização</option>
-                <option value="outro">Outro</option>
-              </select>
-            </div>
+            <Select
+              label="Tipo"
+              name="type"
+              defaultValue="encontro"
+              options={[
+                { value: 'encontro', label: 'Jogo', hint: 'o jogo normal do grupo' },
+                { value: 'treino', label: 'Treino' },
+                { value: 'amistoso', label: 'Amistoso' },
+                { value: 'campeonato', label: 'Campeonato' },
+                { value: 'confraternizacao', label: 'Confraternização' },
+                { value: 'outro', label: 'Outro' },
+              ]}
+            />
 
             <Field label="Data" name="eventDate" type="date" required />
             <Field label="Horário de início" name="startTime" type="time" defaultValue="20:00" />

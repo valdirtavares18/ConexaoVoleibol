@@ -36,8 +36,8 @@ export default async function RedefinirSenhaPage({
         ) : (
           <div className="flex flex-col gap-4">
             <Callout tone="danger" title="Link incompleto">
-              Este endereço não traz o código de recuperação. Abra o link direto do e-mail que
-              você recebeu, ou solicite outro.
+              Este endereço não traz o código de recuperação. Abra o link direto do e-mail que você
+              recebeu, ou solicite outro.
             </Callout>
             <Link
               href="/recuperar-acesso"
