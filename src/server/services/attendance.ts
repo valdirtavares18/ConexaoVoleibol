@@ -3,7 +3,15 @@ import type { Database } from '@/db/client';
 import { eventParticipants, events, teamFormations } from '@/db/schema';
 import { ConflictError, DomainError, NotFoundError } from '@/domain/shared/errors';
 import { requireAttendanceResponse, requireEventManagement, type Actor } from '@/server/policies';
+import type { EmailMessage } from '@/server/email/mailer';
+import { spotOpenedEmail } from '@/server/email/templates';
 import { recordAudit } from './audit';
+import {
+  createNotifications,
+  resolveAccountsForAthletes,
+  sendEmailsInBackground,
+} from './notifications';
+import { formatEventDate } from './sharing';
 
 /**
  * Presenças e lista de espera (§9.2 e §9.3).
@@ -64,7 +72,12 @@ export async function respondToEvent(
 ): Promise<AttendanceOutcome> {
   const actor = requireAttendanceResponse(params.actor, params.athleteId);
 
-  return db.transaction(async (tx) => {
+  // Preenchido dentro da transação e disparado depois do commit: um provedor de
+  // e-mail lento não pode segurar a confirmação de presença nem estourar o
+  // tempo da transação.
+  let pendingEmails: EmailMessage[] = [];
+
+  const outcome = await db.transaction(async (tx): Promise<AttendanceOutcome> => {
     // Lock da linha do evento: serializa todas as respostas deste encontro.
     const [event] = await tx
       .select()
@@ -221,6 +234,31 @@ export async function respondToEvent(
           .where(eq(eventParticipants.id, next.id));
 
         outcome = { ...outcome, promotedAthleteId: next.athleteId };
+
+        // Avisa quem foi promovido — dentro da transação, para o aviso não
+        // sobreviver a um rollback. O e-mail sai depois do commit.
+        const accounts = await resolveAccountsForAthletes(tx, [next.athleteId]);
+
+        await createNotifications(
+          tx,
+          accounts.map((account) => ({
+            userId: account.userId,
+            kind: 'vaga_liberada' as const,
+            title: 'Você entrou no encontro',
+            body: `Abriu uma vaga em "${event.title}" e você era o primeiro da lista de espera. Sua presença está confirmada.`,
+            href: `/app/eventos/${params.eventId}`,
+          })),
+        );
+
+        pendingEmails = accounts.map((account) =>
+          spotOpenedEmail({
+            to: account.email,
+            name: account.name,
+            eventTitle: event.title,
+            eventDate: formatEventDate(event.eventDate),
+            eventId: params.eventId,
+          }),
+        );
       }
 
       // §9.4 — formação publicada deixa de refletir a lista de confirmados.
@@ -258,6 +296,10 @@ export async function respondToEvent(
 
     return outcome;
   });
+
+  sendEmailsInBackground(pendingEmails);
+
+  return outcome;
 }
 
 /** Reordena a fila de espera manualmente (§9.3). Exclusivo de administradores. */

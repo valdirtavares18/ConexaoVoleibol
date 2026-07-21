@@ -23,3 +23,5 @@ next-env.d.ts
 .vercel
 
 e2e/.auth/
+
+/public/uploads/

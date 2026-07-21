@@ -79,7 +79,13 @@ export default async function TimesPage() {
         eyebrow={formatEventDate(event.eventDate)}
         title={event.title}
         description={`Times publicados · versão ${formation.version}`}
-        actions={<ShareButton title={`Times — ${event.title}`} text={message} />}
+        actions={
+          <ShareButton
+            title={`Times — ${event.title}`}
+            text={message}
+            artUrl={`/api/eventos/${event.id}/arte`}
+          />
+        }
       />
 
       {formation.status === 'necessita_revisao' ? (

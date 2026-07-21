@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { AvatarUpload } from '@/components/athletes/avatar-upload';
 import {
   AthleteAvatar,
   Badge,
@@ -101,6 +102,17 @@ export default async function PerfilPage() {
               ))}
             </div>
           </div>
+        </PanelBody>
+      </Panel>
+
+      <Panel>
+        <PanelHeader title="Foto" />
+        <PanelBody>
+          <AvatarUpload
+            athleteId={actor.athleteId}
+            name={athlete.fullName}
+            currentUrl={athlete.avatarUrl}
+          />
         </PanelBody>
       </Panel>
 

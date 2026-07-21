@@ -29,10 +29,12 @@ function isActive(pathname: string, href: string): boolean {
 export function AthleteShell({
   children,
   isAdmin,
+  unreadCount,
   signOut,
 }: {
   children: ReactNode;
   isAdmin: boolean;
+  unreadCount: number;
   signOut: () => Promise<void>;
 }) {
   const pathname = usePathname();
@@ -65,6 +67,27 @@ export function AthleteShell({
                 );
               })}
             </nav>
+
+            <Link
+              href="/app/avisos"
+              className="text-cva-blue-100 relative rounded-md px-3 py-1.5 text-sm hover:bg-white/5 hover:text-white"
+            >
+              Avisos
+              {unreadCount > 0 ? (
+                <>
+                  {/* Número e rótulo: o contador não depende só do ponto colorido. */}
+                  <span
+                    aria-hidden="true"
+                    className="bg-cva-gold-500 text-cva-navy-950 absolute -top-0.5 right-0.5 min-w-4 rounded-full px-1 text-[10px] leading-4 font-bold"
+                  >
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                  <span className="sr-only">
+                    {unreadCount} {unreadCount === 1 ? 'aviso não lido' : 'avisos não lidos'}
+                  </span>
+                </>
+              ) : null}
+            </Link>
 
             {isAdmin ? (
               <Link

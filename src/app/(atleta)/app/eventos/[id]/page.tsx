@@ -134,7 +134,15 @@ export default async function EventoPage({ params }: { params: Promise<{ id: str
                 ? 'Houve cancelamento depois da publicação — os times podem mudar.'
                 : `Versão ${formation.version}`
             }
-            actions={shareMessage ? <ShareButton title={event.title} text={shareMessage} /> : null}
+            actions={
+              shareMessage ? (
+                <ShareButton
+                  title={event.title}
+                  text={shareMessage}
+                  artUrl={`/api/eventos/${event.id}/arte`}
+                />
+              ) : null
+            }
           />
           <PanelBody flush>
             <div className="bg-cva-border grid gap-px sm:grid-cols-3">

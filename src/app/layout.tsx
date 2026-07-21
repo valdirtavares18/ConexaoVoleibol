@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { ConnectionStatus } from '@/components/layout/connection-status';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -28,7 +29,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body className="min-h-dvh antialiased">{children}</body>
+      <body className="min-h-dvh antialiased">
+        {children}
+        <ConnectionStatus />
+      </body>
     </html>
   );
 }

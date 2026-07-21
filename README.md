@@ -162,16 +162,55 @@ brasão aparece vazio.
 
 ---
 
+## Integrações opcionais
+
+Tudo abaixo funciona **sem configurar nada** em desenvolvimento; as variáveis
+apenas trocam o destino em produção.
+
+### E-mail
+
+Sem `RESEND_API_KEY`, o e-mail é impresso no terminal com o link clicável — o
+fluxo de recuperação de acesso é testável de ponta a ponta sem provedor. Com a
+chave definida, os mesmos e-mails saem pelo [Resend](https://resend.com).
+
+Mensagens implementadas: recuperação de acesso, cadastro aprovado, vaga liberada
+na lista de espera e times publicados.
+
+O envio é sempre **em segundo plano**: um provedor lento ou fora do ar não pode
+segurar a confirmação de presença nem estourar o tempo de uma transação.
+
+### Storage de avatares
+
+Sem `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY`, os arquivos vão para
+`public/uploads/`. Com as chaves, vão para o bucket do Supabase (que precisa ser
+público). Em ambos os casos a validação é a mesma: até 2 MB, JPG/PNG/WEBP,
+conferindo a **assinatura dos bytes** e não só o `Content-Type` declarado.
+
+### Arte compartilhável
+
+`GET /api/eventos/[id]/arte` devolve um PNG 1080×1350 com a identidade do CVA e
+os três times, gerado sob demanda. Exige sessão ativa — a arte lista nomes de
+pessoas. O botão "Arte" aparece ao lado de "Compartilhar" nas telas de times.
+
+### PWA
+
+O app é instalável (`manifest.ts`), abre direto em `/app` sem barra de endereço e
+avisa de forma destacada quando a conexão cai — importante no ginásio, onde o
+sinal é ruim e quem opera o painel de quadra precisa saber na hora que o
+resultado não foi salvo.
+
+---
+
 ## Limitações conhecidas
 
-1. **Sem envio de e-mail.** A recuperação de acesso gera e armazena o token com
-   hash e expiração, mas não existe provedor de e-mail configurado — a conclusão
-   depende de um administrador. Integrar um provedor é o próximo passo natural.
-2. **Storage de avatares não conectado.** As colunas e a interface existem; falta
-   ligar o upload ao Supabase Storage.
-3. **Arte de compartilhamento é texto.** A mensagem para WhatsApp está pronta e
-   testada; a imagem com o brasão e os três times ainda não é gerada.
-4. **Notificações são apenas registro em banco.** A tabela existe e é populada;
-   não há push nem badge na interface.
-5. **PWA e modo offline** do painel de quadra não foram implementados (estavam
-   listados como fase complementar).
+1. **Sem push notification.** Os avisos aparecem no app (`/app/avisos`, com
+   contador no cabeçalho) e por e-mail. Push no navegador exigiria chaves VAPID
+   e um service worker próprio — não implementado.
+2. **Sem sincronização offline.** O app avisa quando a conexão cai, mas não
+   enfileira ações para reenviar depois. Fazer isso no painel de quadra exigiria
+   resolução de conflito e mudaria a semântica do rodízio.
+3. **Estatísticas avançadas** (aproveitamento de duplas, comparação entre
+   equilíbrio previsto e placar real) não foram implementadas — estavam listadas
+   como fase complementar.
+4. **Sem gestão de campeonatos, uniformes ou enquetes** — também fase
+   complementar.

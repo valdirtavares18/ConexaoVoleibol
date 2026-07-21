@@ -13,7 +13,16 @@ import { Button } from '@/components/ui/button';
  * O texto vem pronto do servidor: esta camada não monta mensagem, para não
  * existir um segundo lugar capaz de vazar dado privado.
  */
-export function ShareButton({ title, text }: { title: string; text: string }) {
+export function ShareButton({
+  title,
+  text,
+  /** Quando informado, oferece também o download da arte em imagem. */
+  artUrl,
+}: {
+  title: string;
+  text: string;
+  artUrl?: string;
+}) {
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const share = async (): Promise<void> => {
@@ -46,6 +55,16 @@ export function ShareButton({ title, text }: { title: string; text: string }) {
       <Button variant="secondary" size="sm" onClick={() => void share()}>
         Compartilhar
       </Button>
+      {artUrl ? (
+        <a
+          href={artUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border-cva-border-strong bg-cva-panel text-cva-navy-900 hover:bg-cva-blue-100/50 inline-flex h-9 items-center rounded-md border px-3 text-sm font-semibold"
+        >
+          Arte
+        </a>
+      ) : null}
     </div>
   );
 }

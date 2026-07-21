@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { AthleteShell } from '@/components/layout/athlete-shell';
+import { db } from '@/db/client';
+import { countUnread } from '@/server/services/notifications';
 import { signOutAction } from '@/server/auth/actions';
 import { getActor } from '@/server/context';
 import { isAdmin } from '@/server/policies';
@@ -21,8 +23,10 @@ export default async function AtletaLayout({ children }: { children: ReactNode }
   }
   if (actor.status !== 'ativo') redirect('/entrar');
 
+  const unreadCount = await countUnread(db, actor);
+
   return (
-    <AthleteShell isAdmin={isAdmin(actor)} signOut={signOutAction}>
+    <AthleteShell isAdmin={isAdmin(actor)} unreadCount={unreadCount} signOut={signOutAction}>
       {children}
     </AthleteShell>
   );

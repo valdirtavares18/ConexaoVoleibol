@@ -20,7 +20,10 @@ import {
   type Actor,
   type AthleteRecord,
 } from '@/server/policies';
+import type { EmailMessage } from '@/server/email/mailer';
+import { registrationApprovedEmail } from '@/server/email/templates';
 import { recordAudit } from './audit';
+import { createNotification, sendEmailsInBackground } from './notifications';
 
 /** Cadastro e vínculo de atletas (§5). */
 
@@ -381,7 +384,9 @@ export async function approveRegistration(
 ): Promise<{ athleteId: string }> {
   const actor = requireAdmin(params.actor);
 
-  return db.transaction(async (tx) => {
+  let pendingEmails: EmailMessage[] = [];
+
+  const result = await db.transaction(async (tx) => {
     const [user] = await tx.select().from(users).where(eq(users.id, params.userId)).limit(1);
     if (!user) throw new NotFoundError('Cadastro não encontrado.');
 
@@ -420,6 +425,16 @@ export async function approveRegistration(
       .values({ userId: params.userId, role: 'atleta', grantedByUserId: actor.userId })
       .onConflictDoNothing();
 
+    await createNotification(tx, {
+      userId: params.userId,
+      kind: 'comunicado',
+      title: 'Cadastro aprovado',
+      body: 'Bem-vindo ao Conexão Voleibol Alegrete. Você já pode confirmar presença nos encontros.',
+      href: '/app',
+    });
+
+    pendingEmails = [registrationApprovedEmail({ to: user.email, name: user.name })];
+
     await recordAudit(tx, {
       actorUserId: actor.userId,
       action: 'cadastro.aprovar',
@@ -431,6 +446,10 @@ export async function approveRegistration(
 
     return { athleteId };
   });
+
+  sendEmailsInBackground(pendingEmails);
+
+  return result;
 }
 
 export async function rejectRegistration(

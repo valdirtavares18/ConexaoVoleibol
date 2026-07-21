@@ -10,6 +10,9 @@ import { athleteAccountLinks, athletes, passwordResetTokens, userRoles, users } 
 import { isDomainError } from '@/domain/shared/errors';
 import { PASSWORD_MIN_LENGTH } from '@/domain/shared/password-policy';
 import type { AuthFormState } from '@/lib/action-state';
+import { isEmailConfigured } from '@/server/email/mailer';
+import { passwordResetEmail } from '@/server/email/templates';
+import { sendEmailsInBackground } from '@/server/services/notifications';
 import { hashPassword, validatePasswordStrength } from './password';
 import { consumeRateLimit, RATE_LIMITS } from './rate-limit';
 import { createSession, revokeAllSessions } from './session';
@@ -185,24 +188,35 @@ export async function requestPasswordResetAction(
   }
 
   const [user] = await db
-    .select({ id: users.id })
+    .select({ id: users.id, name: users.name })
     .from(users)
     .where(and(eq(users.email, parsed.data.email), isNull(users.deletedAt)))
     .limit(1);
 
   if (user) {
     const token = randomBytes(32).toString('base64url');
+
     await db.insert(passwordResetTokens).values({
       userId: user.id,
       tokenHash: hashToken(token),
       expiresAt: new Date(Date.now() + RESET_TOKEN_TTL_MS),
     });
 
-    // Sem provedor de e-mail nesta versão: o token fica registrado e o
-    // administrador conclui a troca. Ver "Limitações" no README.
+    // Guardamos apenas o hash; o token em claro existe só nesta variável e no
+    // e-mail. Envio em segundo plano: a resposta ao usuário é a mesma exista a
+    // conta ou não, e não pode variar de tempo conforme o provedor responde.
+    sendEmailsInBackground([
+      passwordResetEmail({ to: parsed.data.email, name: user.name, token }),
+    ]);
   }
 
-  return genericResponse;
+  return {
+    ...genericResponse,
+    message: isEmailConfigured()
+      ? 'Se existir uma conta com esse e-mail, enviamos um link para redefinir a senha. ' +
+        'O link vale por 1 hora.'
+      : genericResponse.message,
+  };
 }
 
 const resetSchema = z

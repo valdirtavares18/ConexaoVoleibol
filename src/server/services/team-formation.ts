@@ -30,7 +30,15 @@ import {
   type PlayerLock,
 } from '@/domain/team-balancing';
 import { requireTeamGeneration, type Actor } from '@/server/policies';
+import type { EmailMessage } from '@/server/email/mailer';
+import { teamsPublishedEmail } from '@/server/email/templates';
 import { recordAudit } from './audit';
+import {
+  createNotifications,
+  resolveAccountsForAthletes,
+  sendEmailsInBackground,
+} from './notifications';
+import { formatEventDate } from './sharing';
 
 /**
  * Ponte entre o banco e o gerador de times (`src/domain/team-balancing`).
@@ -404,7 +412,9 @@ export async function publishFormation(
     throw new ConflictError('Há um atleta repetido em mais de um time.');
   }
 
-  return db.transaction(async (tx) => {
+  let pendingEmails: EmailMessage[] = [];
+
+  const result = await db.transaction(async (tx) => {
     const [event] = await tx
       .select()
       .from(events)
@@ -501,6 +511,31 @@ export async function publishFormation(
       }
     }
 
+    // Avisa os atletas escalados. Dentro da transação: se a publicação
+    // reverter, ninguém recebe aviso de um time que não existe.
+    const accounts = await resolveAccountsForAthletes(tx, flat);
+
+    await createNotifications(
+      tx,
+      accounts.map((account) => ({
+        userId: account.userId,
+        kind: 'times_publicados' as const,
+        title: 'Times publicados',
+        body: `Os times de "${event.title}" já estão definidos.`,
+        href: '/app/times',
+      })),
+    );
+
+    pendingEmails = accounts.map((account) =>
+      teamsPublishedEmail({
+        to: account.email,
+        name: account.name,
+        eventTitle: event.title,
+        eventDate: formatEventDate(event.eventDate),
+        eventId: params.eventId,
+      }),
+    );
+
     await recordAudit(tx, {
       actorUserId: actor.userId,
       action: 'times.publicar',
@@ -511,6 +546,10 @@ export async function publishFormation(
 
     return { formationId, version };
   });
+
+  sendEmailsInBackground(pendingEmails);
+
+  return result;
 }
 
 export interface PublishedFormation {
