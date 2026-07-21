@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge, Callout, EmptyState, Panel, PanelBody, PanelHeader } from '@/components/ui/primitives';
@@ -44,6 +45,7 @@ export function AttendanceManager({
   declined: Entry[];
   noResponse: Entry[];
 }) {
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [feedback, setFeedback] = useState<{ ok: boolean; message: string } | null>(null);
   const [queue, setQueue] = useState(waitlist);
@@ -57,6 +59,11 @@ export function AttendanceManager({
 
       const result = await respondToEventAction({ ok: false, message: null }, formData);
       setFeedback({ ok: result.ok, message: result.message ?? '' });
+
+      // Ações chamadas fora de `<form action>` não re-renderizam a árvore
+      // servidor sozinhas. Sem isto, a lista continuaria mostrando o atleta que
+      // acabou de ser confirmado.
+      if (result.ok) router.refresh();
     });
   };
 

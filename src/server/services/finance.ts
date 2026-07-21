@@ -49,6 +49,13 @@ export interface EventFinanceView {
   valuePerAthleteCents: Cents;
   courtCostCents: Cents;
   settlement: EventSettlement;
+  /**
+   * Situação **persistida** do encontro — se já foi conciliado e incorporado ao
+   * caixa. Não confundir com `settlement.status`, que só diz se todo mundo
+   * pagou: um encontro pode estar 100% recebido e ainda não ter sido fechado.
+   */
+  eventFinancialStatus: 'aberto' | 'parcialmente_recebido' | 'fechado';
+  courtCostPaid: boolean;
   lines: {
     athleteId: string;
     displayName: string;
@@ -291,6 +298,8 @@ export async function getEventFinance(
     valuePerAthleteCents: cents(event.valuePerAthleteCents),
     courtCostCents: cents(event.courtCostCents),
     settlement,
+    eventFinancialStatus: event.financialStatus,
+    courtCostPaid: event.courtCostPaid !== null,
     lines: chargeRows.map((row) => ({
       athleteId: row.athleteId,
       displayName: row.nickname ?? row.fullName,

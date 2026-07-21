@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge, Callout, Panel, PanelBody, PanelHeader } from '@/components/ui/primitives';
@@ -26,6 +27,7 @@ const REASON_LABELS: Record<string, string> = {
 };
 
 export function CourtPanel({ eventId, panel }: { eventId: string; panel: CourtPanelState }) {
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [feedback, setFeedback] = useState<{ ok: boolean; message: string } | null>(null);
   const [leftScore, setLeftScore] = useState('');
@@ -53,6 +55,9 @@ export function CourtPanel({ eventId, panel }: { eventId: string; panel: CourtPa
 
       setFeedback({ ok: result.ok, message: result.message ?? '' });
       if (result.ok) {
+        // Ações chamadas fora de `<form action>` não re-renderizam a árvore
+        // servidor sozinhas — sem isto o painel continuaria na partida anterior.
+        router.refresh();
         setLeftScore('');
         setRightScore('');
         setTieChoice(null);
@@ -67,6 +72,7 @@ export function CourtPanel({ eventId, panel }: { eventId: string; panel: CourtPa
     startTransition(async () => {
       const result = await undoMatchAction(eventId, panel.sessionId);
       setFeedback({ ok: result.ok, message: result.message ?? '' });
+      if (result.ok) router.refresh();
     });
   };
 
@@ -74,6 +80,7 @@ export function CourtPanel({ eventId, panel }: { eventId: string; panel: CourtPa
     startTransition(async () => {
       const result = await finishSessionAction(eventId, panel.sessionId);
       setFeedback({ ok: result.ok, message: result.message ?? '' });
+      if (result.ok) router.refresh();
     });
   };
 

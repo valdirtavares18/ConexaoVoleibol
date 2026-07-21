@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useActionState, useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge, Callout, Panel, PanelBody, PanelHeader } from '@/components/ui/primitives';
@@ -40,15 +41,19 @@ const STATUS: Record<string, { label: string; tone: 'neutral' | 'success' | 'war
 export function EventFinanceManager({
   eventId,
   lines,
-  status,
+  eventFinancialStatus,
+  courtCostPaid,
 }: {
   eventId: string;
   lines: Line[];
-  status: string;
+  /** Situação persistida do encontro, não a completude dos pagamentos. */
+  eventFinancialStatus: 'aberto' | 'parcialmente_recebido' | 'fechado';
+  courtCostPaid: boolean;
 }) {
   const [paymentState, paymentAction] = useActionState(registerPaymentAction, EMPTY_ACTION_STATE);
   const [adjustState, adjustAction] = useActionState(adjustChargeAction, EMPTY_ACTION_STATE);
   const [closeState, closeAction] = useActionState(closeEventFinanceAction, EMPTY_ACTION_STATE);
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [generateFeedback, setGenerateFeedback] = useState<string | null>(null);
   const [adjusting, setAdjusting] = useState<string | null>(null);
@@ -57,6 +62,10 @@ export function EventFinanceManager({
     startTransition(async () => {
       const result = await generateChargesAction(eventId);
       setGenerateFeedback(result.message);
+
+      // Ação chamada fora de `<form action>`: sem o refresh, a tabela de
+      // cobranças recém-criadas não apareceria até um recarregamento manual.
+      if (result.ok) router.refresh();
     });
   };
 
@@ -212,7 +221,7 @@ export function EventFinanceManager({
         </Panel>
       )}
 
-      {lines.length > 0 && status !== 'fechado' ? (
+      {lines.length > 0 && eventFinancialStatus !== 'fechado' ? (
         <Panel>
           <PanelHeader
             title="Fechar o encontro"
@@ -226,10 +235,15 @@ export function EventFinanceManager({
                 <input
                   type="checkbox"
                   name="courtCostPaid"
+                  // Já registrado como pago: vem marcado e o texto reflete isso.
+                  // Ainda não pago: vem marcado mesmo assim, porque fechar o
+                  // encontro normalmente acontece depois de acertar a quadra.
                   defaultChecked
                   className="accent-cva-navy-900 size-4"
                 />
-                O custo da quadra já foi pago
+                {courtCostPaid
+                  ? 'O custo da quadra já está registrado como pago'
+                  : 'O custo da quadra já foi pago'}
               </label>
 
               <div>

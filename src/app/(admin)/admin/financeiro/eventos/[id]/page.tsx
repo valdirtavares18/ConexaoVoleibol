@@ -96,9 +96,13 @@ export default async function FinanceiroEventoPage({
         </PanelBody>
       </Panel>
 
-      {settlement.status === 'fechado' ? (
+      {finance.eventFinancialStatus === 'fechado' ? (
         <Callout tone="success" title="Financeiro fechado">
           Este encontro já foi conciliado e incorporado ao caixa.
+        </Callout>
+      ) : settlement.pendingCents === 0 && settlement.receivedCents > 0 ? (
+        <Callout tone="info" title="Tudo recebido">
+          Falta apenas fechar o encontro para incorporar o resultado ao caixa.
         </Callout>
       ) : null}
 
@@ -113,7 +117,8 @@ export default async function FinanceiroEventoPage({
           dueLabel: formatCents(line.amountDueCents),
           paidLabel: formatCents(line.amountPaidCents),
         }))}
-        status={settlement.status}
+        eventFinancialStatus={finance.eventFinancialStatus}
+        courtCostPaid={finance.courtCostPaid}
       />
 
       <Panel>

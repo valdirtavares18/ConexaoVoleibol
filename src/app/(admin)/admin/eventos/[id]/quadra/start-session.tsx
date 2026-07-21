@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Callout, Panel, PanelBody, PanelHeader } from '@/components/ui/primitives';
@@ -17,13 +18,15 @@ export function StartSession({
   eventId: string;
   teamNames: string[];
 }) {
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
   const start = (): void => {
     startTransition(async () => {
       const result = await startCourtSessionAction(eventId);
-      if (!result.ok) setError(result.message);
+      if (result.ok) router.refresh();
+      else setError(result.message);
     });
   };
 

@@ -78,6 +78,7 @@ export async function signUpAction(
     }
 
     const passwordHash = await hashPassword(password);
+    let createdUserId: string | null = null;
 
     await db.transaction(async (tx) => {
       const [user] = await tx
@@ -86,6 +87,7 @@ export async function signUpAction(
         .returning({ id: users.id });
 
       const userId = user?.id as string;
+      createdUserId = userId;
       await tx.insert(userRoles).values({ userId, role: 'atleta' });
 
       // Perfil gerenciado com o mesmo e-mail ou telefone: propõe o vínculo.
@@ -112,6 +114,18 @@ export async function signUpAction(
           .onConflictDoNothing();
       }
     });
+
+    // Cria a sessão já no cadastro. Sem isto, `/aguardando-aprovacao` não
+    // encontraria ator e devolveria a pessoa para a tela de login logo depois
+    // de ela ter se cadastrado — sem explicação nenhuma. Os portões de `/app` e
+    // `/admin` continuam barrando enquanto o status não for `ativo`.
+    if (createdUserId) {
+      await createSession({
+        userId: createdUserId,
+        userAgent: requestHeaders.get('user-agent'),
+        ipAddress: ip,
+      });
+    }
   } catch (error) {
     if (isDomainError(error)) return { error: error.message, fieldErrors: {} };
     throw error;
