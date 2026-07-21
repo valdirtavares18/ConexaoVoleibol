@@ -1,6 +1,7 @@
 import { and, asc, desc, eq, gte, isNull, lt, sql } from 'drizzle-orm';
 import type { Database } from '@/db/client';
 import { clubSettings, eventParticipants, events, teamFormations } from '@/db/schema';
+import { outer } from '@/db/sql';
 import { ConflictError, NotFoundError } from '@/domain/shared/errors';
 import { requireActive, requireEventManagement, type Actor } from '@/server/policies';
 import { recordAudit } from './audit';
@@ -171,10 +172,10 @@ const summarySelection = {
   notes: events.notes,
   capacity: events.capacity,
   confirmationDeadline: events.confirmationDeadline,
-  confirmedCount: sql<number>`(select count(*) from event_participants p where p.event_id = ${events.id} and p.status = 'confirmado')::int`,
-  waitlistCount: sql<number>`(select count(*) from event_participants p where p.event_id = ${events.id} and p.status = 'lista_espera')::int`,
-  publishedFormations: sql<number>`(select count(*) from team_formations f where f.event_id = ${events.id} and f.status = 'publicada')::int`,
-  reviewFormations: sql<number>`(select count(*) from team_formations f where f.event_id = ${events.id} and f.status = 'necessita_revisao')::int`,
+  confirmedCount: sql<number>`(select count(*) from event_participants p where p.event_id = ${outer(events.id)} and p.status = 'confirmado')::int`,
+  waitlistCount: sql<number>`(select count(*) from event_participants p where p.event_id = ${outer(events.id)} and p.status = 'lista_espera')::int`,
+  publishedFormations: sql<number>`(select count(*) from team_formations f where f.event_id = ${outer(events.id)} and f.status = 'publicada')::int`,
+  reviewFormations: sql<number>`(select count(*) from team_formations f where f.event_id = ${outer(events.id)} and f.status = 'necessita_revisao')::int`,
 };
 
 function toSummary(

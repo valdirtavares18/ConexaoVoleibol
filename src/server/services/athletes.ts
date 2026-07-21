@@ -8,6 +8,7 @@ import {
   userRoles,
   users,
 } from '@/db/schema';
+import { outer } from '@/db/sql';
 import type { PositionCode } from '@/domain/positions';
 import { ConflictError, DomainError, NotFoundError } from '@/domain/shared/errors';
 import {
@@ -261,8 +262,8 @@ export async function listAthletes(
       avatarUrl: athletes.avatarUrl,
       shirtNumber: athletes.shirtNumber,
       status: athletes.status,
-      primaryPosition: sql<PositionCode | null>`(select p.position from athlete_positions p where p.athlete_id = ${athletes.id} and p.role = 'principal' limit 1)`,
-      hasAccount: sql<boolean>`exists (select 1 from athlete_account_links l where l.athlete_id = ${athletes.id} and l.status = 'aprovado')`,
+      primaryPosition: sql<PositionCode | null>`(select p.position from athlete_positions p where p.athlete_id = ${outer(athletes.id)} and p.role = 'principal' limit 1)`,
+      hasAccount: sql<boolean>`exists (select 1 from athlete_account_links l where l.athlete_id = ${outer(athletes.id)} and l.status = 'aprovado')`,
       officialOverall: officialEvaluations.overall,
       evaluationStatus: officialEvaluations.status,
     })
@@ -355,10 +356,10 @@ export async function listPendingRegistrations(
       createdAt: users.createdAt,
       matchId: sql<
         string | null
-      >`(select a.id from athletes a where lower(a.email) = lower(${users.email}) and a.deleted_at is null limit 1)`,
+      >`(select a.id from athletes a where lower(a.email) = lower(${outer(users.email)}) and a.deleted_at is null limit 1)`,
       matchName: sql<
         string | null
-      >`(select a.full_name from athletes a where lower(a.email) = lower(${users.email}) and a.deleted_at is null limit 1)`,
+      >`(select a.full_name from athletes a where lower(a.email) = lower(${outer(users.email)}) and a.deleted_at is null limit 1)`,
     })
     .from(users)
     .where(and(eq(users.status, 'aguardando_aprovacao'), isNull(users.deletedAt)))

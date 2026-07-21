@@ -1,5 +1,6 @@
 import { and, desc, eq, inArray, isNotNull, sql } from 'drizzle-orm';
 import type { Database } from '@/db/client';
+import { outer } from '@/db/sql';
 import {
   athletes,
   cashTransactions,
@@ -675,8 +676,8 @@ export async function listEventsWithFinance(
       eventDate: events.eventDate,
       status: events.status,
       financialStatus: events.financialStatus,
-      expected: sql<number>`coalesce((select sum(c.amount_due_cents) from event_charges c where c.event_id = ${events.id} and c.status not in ('dispensado','estornado')), 0)::int`,
-      received: sql<number>`coalesce((select sum(c.amount_paid_cents) from event_charges c where c.event_id = ${events.id} and c.status not in ('dispensado','estornado')), 0)::int`,
+      expected: sql<number>`coalesce((select sum(c.amount_due_cents) from event_charges c where c.event_id = ${outer(events.id)} and c.status not in ('dispensado','estornado')), 0)::int`,
+      received: sql<number>`coalesce((select sum(c.amount_paid_cents) from event_charges c where c.event_id = ${outer(events.id)} and c.status not in ('dispensado','estornado')), 0)::int`,
     })
     .from(events)
     .orderBy(desc(events.eventDate))
