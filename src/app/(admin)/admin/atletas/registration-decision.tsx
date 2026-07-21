@@ -4,7 +4,7 @@ import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Callout } from '@/components/ui/primitives';
-import { Select } from '@/components/ui/select';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { EMPTY_ACTION_STATE } from '@/lib/action-state';
 import {
   approveRegistrationAction,
@@ -77,13 +77,14 @@ export function RegistrationDecision({
         {/* Vazio quando é para criar um perfil novo — a action trata assim. */}
         <input type="hidden" name="linkToAthleteId" value={linkTo === NEW_PROFILE ? '' : linkTo} />
 
-        <Select
+        <SearchableSelect
           size="sm"
           className="min-w-64"
           label="Vincular a um perfil existente"
           name={`link-${userId}`}
           value={linkTo}
           onValueChange={setLinkTo}
+          searchPlaceholder="Buscar perfil…"
           options={[
             { value: NEW_PROFILE, label: `Criar um perfil novo para ${name}` },
             ...(matchAthleteId && matchName

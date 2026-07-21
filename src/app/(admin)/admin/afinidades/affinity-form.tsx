@@ -4,6 +4,7 @@ import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Callout, Panel, PanelBody, PanelHeader } from '@/components/ui/primitives';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { Select, type SelectOption } from '@/components/ui/select';
 import { EMPTY_ACTION_STATE } from '@/lib/action-state';
 import { saveAdminAffinityAction } from '@/server/actions/admin-actions';
@@ -58,18 +59,20 @@ export function AffinityForm({ athletes }: { athletes: { id: string; displayName
 
         <form action={formAction} className="flex flex-col gap-4">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Select
+            <SearchableSelect
               label="De (quem prefere)"
               name="fromAthleteId"
               required
               options={athleteOptions}
+              searchPlaceholder="Nome ou apelido…"
             />
 
-            <Select
+            <SearchableSelect
               label="Para (em relação a quem)"
               name="toAthleteId"
               required
               options={athleteOptions}
+              searchPlaceholder="Nome ou apelido…"
             />
 
             <Select

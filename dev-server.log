@@ -1,0 +1,9 @@
+   ▲ Next.js 15.5.20
+   - Local:        http://localhost:3000
+   - Network:      http://26.214.15.108:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 3s
+ ○ Compiling /entrar ...
+ ✓ Compiled /entrar in 6.7s (1157 modules)

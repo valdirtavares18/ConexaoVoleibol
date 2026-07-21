@@ -11,6 +11,7 @@ import {
   PanelBody,
   PanelHeader,
 } from '@/components/ui/primitives';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { Select } from '@/components/ui/select';
 import { EMPTY_ACTION_STATE } from '@/lib/action-state';
 import { deleteAffinityAction, saveAffinityAction } from '@/server/actions/profile-actions';
@@ -96,10 +97,11 @@ export function PreferencesForm({
 
           <form action={formAction} className="flex flex-col gap-3">
             <div className="grid gap-3 sm:grid-cols-2">
-              <Select
+              <SearchableSelect
                 label="Atleta"
                 name="toAthleteId"
                 required
+                searchPlaceholder="Nome ou apelido…"
                 options={athletes.map((athlete) => ({
                   value: athlete.id,
                   label: athlete.displayName,

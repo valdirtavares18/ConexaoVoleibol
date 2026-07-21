@@ -11,6 +11,8 @@ import {
   PanelBody,
   PanelHeader,
 } from '@/components/ui/primitives';
+import { SearchField } from '@/components/ui/search-field';
+import { matches } from '@/lib/search';
 import { reorderWaitlistAction, respondToEventAction } from '@/server/actions/attendance-actions';
 
 /**
@@ -56,6 +58,8 @@ export function AttendanceManager({
   const [pending, startTransition] = useTransition();
   const [feedback, setFeedback] = useState<{ ok: boolean; message: string } | null>(null);
   const [queue, setQueue] = useState(waitlist);
+  const [availableQuery, setAvailableQuery] = useState('');
+  const [confirmedQuery, setConfirmedQuery] = useState('');
 
   const respond = (athleteId: string, response: string): void => {
     startTransition(async () => {
@@ -96,6 +100,11 @@ export function AttendanceManager({
 
   const available = [...noResponse, ...maybe, ...declined];
 
+  // Filtro no cliente: a lista já veio inteira e tem dezenas de nomes, não
+  // milhares. Filtrar aqui responde a cada tecla, sem ida ao servidor.
+  const visibleAvailable = available.filter((entry) => matches(availableQuery, entry.displayName));
+  const visibleConfirmed = confirmed.filter((entry) => matches(confirmedQuery, entry.displayName));
+
   return (
     <div className="flex flex-col gap-5">
       {feedback ? (
@@ -103,15 +112,36 @@ export function AttendanceManager({
       ) : null}
 
       <Panel>
-        <PanelHeader title="Confirmados" description={`${confirmed.length} de ${capacity} vagas`} />
+        <PanelHeader
+          title="Confirmados"
+          description={`${confirmed.length} de ${capacity} vagas`}
+          actions={
+            // A busca só aparece quando a lista já é grande o bastante para
+            // justificar — num jogo com 5 confirmados ela só ocuparia espaço.
+            confirmed.length > 8 ? (
+              <SearchField
+                className="w-56"
+                label="Buscar entre os confirmados"
+                value={confirmedQuery}
+                onChange={setConfirmedQuery}
+                resultCount={visibleConfirmed.length}
+                totalCount={confirmed.length}
+              />
+            ) : null
+          }
+        />
         <PanelBody flush>
           {confirmed.length === 0 ? (
             <div className="p-4 sm:p-5">
               <EmptyState title="Ninguém confirmou ainda" />
             </div>
+          ) : visibleConfirmed.length === 0 ? (
+            <p className="text-cva-text-muted px-4 py-4 text-sm sm:px-5">
+              Nenhum confirmado com “{confirmedQuery}”.
+            </p>
           ) : (
             <ul className="divide-cva-border divide-y">
-              {confirmed.map((entry) => (
+              {visibleConfirmed.map((entry) => (
                 <li
                   key={entry.athleteId}
                   className="flex items-center justify-between gap-3 px-4 py-2.5 sm:px-5"
@@ -199,15 +229,32 @@ export function AttendanceManager({
         <PanelHeader
           title="Confirmar em nome de um atleta"
           description="Inclui quem ainda não tem conta no sistema."
+          actions={
+            available.length > 8 ? (
+              <SearchField
+                className="w-56"
+                label="Buscar atleta para confirmar"
+                placeholder="Buscar atleta…"
+                value={availableQuery}
+                onChange={setAvailableQuery}
+                resultCount={visibleAvailable.length}
+                totalCount={available.length}
+              />
+            ) : null
+          }
         />
         <PanelBody flush>
           {available.length === 0 ? (
             <p className="text-cva-text-muted px-4 py-4 text-sm sm:px-5">
               Todos os atletas do grupo já responderam.
             </p>
+          ) : visibleAvailable.length === 0 ? (
+            <p className="text-cva-text-muted px-4 py-4 text-sm sm:px-5">
+              Nenhum atleta com “{availableQuery}”.
+            </p>
           ) : (
             <ul className="divide-cva-border divide-y">
-              {available.map((entry) => (
+              {visibleAvailable.map((entry) => (
                 <li
                   key={entry.athleteId}
                   className="flex items-center justify-between gap-3 px-4 py-2.5 sm:px-5"
