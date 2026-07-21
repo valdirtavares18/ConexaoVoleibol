@@ -1,0 +1,172 @@
+@import 'tailwindcss';
+
+/*
+ * Identidade visual do Conexão Voleibol Alegrete.
+ *
+ * O brasão é azul-marinho profundo com escudo e louros dourados, bola branca e
+ * três estrelas. A paleta abaixo deriva dele. Regra de uso: o dourado é
+ * destaque, seleção e ação secundária — nunca fundo dominante de página.
+ */
+
+@theme {
+  /* --- Marca ------------------------------------------------------------ */
+  --color-cva-ink: #0c1014;
+  --color-cva-navy-950: #071426;
+  --color-cva-navy-900: #0c1b3d;
+  --color-cva-navy-800: #12295c;
+  --color-cva-blue-800: #1f3f80;
+  --color-cva-blue-700: #174c9e;
+  --color-cva-blue-600: #2563b8;
+  --color-cva-blue-100: #dbe6f8;
+  --color-cva-gold-500: #eebe1e;
+  --color-cva-gold-600: #c89a0a;
+  --color-cva-gold-100: #fdf3d0;
+  --color-cva-cream: #eeeee2;
+
+  /* --- Superfícies (tema claro) ----------------------------------------- */
+  --color-cva-surface: #f6f8fc;
+  --color-cva-panel: #ffffff;
+  --color-cva-border: #d9dfeb;
+  --color-cva-border-strong: #b9c4d8;
+  --color-cva-text: #101828;
+  --color-cva-text-muted: #5a6785;
+
+  /* --- Estados ----------------------------------------------------------
+   * Tons escolhidos para atingir contraste AA sobre `--color-cva-panel`.
+   */
+  --color-cva-success: #146c43;
+  --color-cva-success-soft: #e6f4ec;
+  --color-cva-warning: #8a5a00;
+  --color-cva-warning-soft: #fdf3d0;
+  --color-cva-danger: #a4262c;
+  --color-cva-danger-soft: #fbeaea;
+  --color-cva-info: #174c9e;
+  --color-cva-info-soft: #dbe6f8;
+
+  /* --- Tipografia -------------------------------------------------------
+   * Stack do sistema: carrega instantâneo, sem requisição externa (a CSP dos
+   * ambientes de deploy bloquearia fontes de CDN de qualquer forma).
+   */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
+
+  /* Números tabulares para placares, notas e valores em tabela. */
+  --font-numeric: var(--font-sans);
+
+  /* --- Raios ------------------------------------------------------------
+   * Contidos de propósito: bordas muito arredondadas leem como template.
+   */
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* --- Elevação ---------------------------------------------------------
+   * Sombras discretas. Nada de sombra pesada.
+   */
+  --shadow-panel: 0 1px 2px rgb(16 24 40 / 0.06), 0 1px 3px rgb(16 24 40 / 0.04);
+  --shadow-raised: 0 4px 12px rgb(16 24 40 / 0.08);
+  --shadow-overlay: 0 16px 40px rgb(7 20 38 / 0.18);
+}
+
+/* --------------------------------------------------------------------------
+ * Tema escuro (opcional, §15.1). Redefine apenas superfícies e texto — as
+ * cores de marca permanecem as mesmas.
+ * ----------------------------------------------------------------------- */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+    --color-cva-surface: #071426;
+    --color-cva-panel: #0c1b3d;
+    --color-cva-border: #1c3059;
+    --color-cva-border-strong: #2c4577;
+    --color-cva-text: #eef2f9;
+    --color-cva-text-muted: #9fb0cd;
+    --color-cva-success-soft: #10331f;
+    --color-cva-warning-soft: #3a2c05;
+    --color-cva-danger-soft: #3a1416;
+    --color-cva-info-soft: #12295c;
+  }
+
+  * {
+    border-color: var(--color-cva-border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-cva-surface);
+    color: var(--color-cva-text);
+    font-family: var(--font-sans);
+    /* Evita "pulo" de layout quando uma página tem barra de rolagem e outra não. */
+    scrollbar-gutter: stable;
+  }
+
+  /* Foco sempre visível — requisito de acessibilidade (§21). */
+  :focus-visible {
+    outline: 2px solid var(--color-cva-gold-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  /* Números alinhados em tabelas, placares e notas. */
+  table,
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* §21 — respeitar redução de movimento. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /*
+   * Faixas diagonais da identidade, usadas com discrição em login, cabeçalhos,
+   * estados vazios e arte de compartilhamento (§15.2).
+   */
+  .cva-stripes {
+    background-image: repeating-linear-gradient(
+      -60deg,
+      transparent 0 22px,
+      color-mix(in srgb, var(--color-cva-gold-500) 14%, transparent) 22px 26px
+    );
+  }
+
+  .cva-stripes-strong {
+    background-image: repeating-linear-gradient(
+      -60deg,
+      transparent 0 14px,
+      color-mix(in srgb, var(--color-cva-gold-500) 42%, transparent) 14px 20px
+    );
+  }
+}
+
+/* Só para leitores de tela. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
