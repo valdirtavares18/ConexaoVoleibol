@@ -71,13 +71,12 @@ export const DEFAULT_POSITIONS: readonly PositionDefinition[] = [
   },
 ] as const;
 
-export const POSITION_BY_CODE: Readonly<Record<PositionCode, PositionDefinition>> =
-  Object.freeze(
-    Object.fromEntries(DEFAULT_POSITIONS.map((p) => [p.code, p])) as Record<
-      PositionCode,
-      PositionDefinition
-    >,
-  );
+export const POSITION_BY_CODE: Readonly<Record<PositionCode, PositionDefinition>> = Object.freeze(
+  Object.fromEntries(DEFAULT_POSITIONS.map((p) => [p.code, p])) as Record<
+    PositionCode,
+    PositionDefinition
+  >,
+);
 
 /** Posições que cada time precisa cobrir por padrão. Configurável em `club_settings`. */
 export const DEFAULT_REQUIRED_POSITIONS: readonly PositionCode[] = ['levantador'];

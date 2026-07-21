@@ -49,10 +49,7 @@ describe('avaliador rápido × implementação de referência', () => {
       const order = shuffled(ids, prng);
       const assignment = [order.slice(0, 6), order.slice(6, 12), order.slice(12, 18)];
 
-      expect(fast(assignment)).toBeCloseTo(
-        diffPercent(teamStrengths(assignment, ctx)),
-        9,
-      );
+      expect(fast(assignment)).toBeCloseTo(diffPercent(teamStrengths(assignment, ctx)), 9);
     }
   });
 });

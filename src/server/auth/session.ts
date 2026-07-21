@@ -137,10 +137,7 @@ export async function destroySession(): Promise<void> {
   if (token) {
     const sessionId = await readSessionToken(token);
     if (sessionId) {
-      await db
-        .update(sessions)
-        .set({ revokedAt: new Date() })
-        .where(eq(sessions.id, sessionId));
+      await db.update(sessions).set({ revokedAt: new Date() }).where(eq(sessions.id, sessionId));
     }
   }
 

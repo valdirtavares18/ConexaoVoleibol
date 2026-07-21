@@ -53,9 +53,7 @@ function placeUnits(
     const unit = units[step] as Unit;
 
     const order =
-      unit.lockedTeamIndex !== null
-        ? [unit.lockedTeamIndex]
-        : preferredTeams(unit, step, teams);
+      unit.lockedTeamIndex !== null ? [unit.lockedTeamIndex] : preferredTeams(unit, step, teams);
 
     for (const teamIndex of order) {
       const capacity = remaining[teamIndex] as number;

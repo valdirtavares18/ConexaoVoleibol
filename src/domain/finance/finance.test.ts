@@ -130,9 +130,7 @@ describe('financeiro — fechamento do evento (§13.3)', () => {
 
   it('estorno não conta como valor recebido', () => {
     const charges = buildCharges(participants(18), PER_ATHLETE).map((line, i) =>
-      i === 0
-        ? { ...line, amountPaidCents: PER_ATHLETE, status: 'estornado' as const }
-        : line,
+      i === 0 ? { ...line, amountPaidCents: PER_ATHLETE, status: 'estornado' as const } : line,
     );
 
     const settlement = settleEvent({
@@ -184,11 +182,7 @@ describe('financeiro — pagamentos individuais (§13.2)', () => {
 });
 
 describe('financeiro — caixa (§13.4)', () => {
-  const tx = (
-    id: string,
-    amount: number,
-    settled: boolean,
-  ): CashTransaction => ({
+  const tx = (id: string, amount: number, settled: boolean): CashTransaction => ({
     id,
     kind: 'arrecadacao_evento',
     amountCents: reaisToCents(amount),

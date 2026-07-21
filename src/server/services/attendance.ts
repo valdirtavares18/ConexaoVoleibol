@@ -228,10 +228,7 @@ export async function respondToEvent(
         .select()
         .from(teamFormations)
         .where(
-          and(
-            eq(teamFormations.eventId, params.eventId),
-            eq(teamFormations.status, 'publicada'),
-          ),
+          and(eq(teamFormations.eventId, params.eventId), eq(teamFormations.status, 'publicada')),
         )
         .limit(1);
 
@@ -255,9 +252,7 @@ export async function respondToEvent(
       action: `presenca.${params.response}`,
       entityType: 'event_participant',
       entityId: `${params.eventId}:${params.athleteId}`,
-      before: existing
-        ? { status: existing.status, confirmedSlot: existing.confirmedSlot }
-        : null,
+      before: existing ? { status: existing.status, confirmedSlot: existing.confirmedSlot } : null,
       after: { status: outcome.status, confirmedSlot: outcome.confirmedSlot },
     });
 

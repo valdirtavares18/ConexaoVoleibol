@@ -10,7 +10,12 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { accountLinkStatusEnum, athleteStatusEnum, positionCodeEnum, positionRoleEnum } from './enums';
+import {
+  accountLinkStatusEnum,
+  athleteStatusEnum,
+  positionCodeEnum,
+  positionRoleEnum,
+} from './enums';
 import { users } from './users';
 
 /**

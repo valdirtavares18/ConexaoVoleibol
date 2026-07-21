@@ -2,6 +2,9 @@ import 'server-only';
 
 import { hash, verify } from '@node-rs/argon2';
 import { DomainError } from '@/domain/shared/errors';
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '@/domain/shared/password-policy';
+
+export { PASSWORD_MIN_LENGTH };
 
 /**
  * Hash de senha com Argon2id.
@@ -15,8 +18,6 @@ const ARGON2_OPTIONS = {
   timeCost: 2,
   parallelism: 1,
 } as const;
-
-export const PASSWORD_MIN_LENGTH = 10;
 
 /**
  * Política de senha (§20). Comprimento é o fator que mais importa; exigir
@@ -40,7 +41,7 @@ export function validatePasswordStrength(password: string, context: string[] = [
     );
   }
 
-  if (password.length > 200) {
+  if (password.length > PASSWORD_MAX_LENGTH) {
     throw new DomainError('ENTRADA_INVALIDA', 'A senha é longa demais.');
   }
 
@@ -57,10 +58,7 @@ export function validatePasswordStrength(password: string, context: string[] = [
   for (const value of context) {
     const trimmed = value.trim().toLowerCase();
     if (trimmed.length >= 4 && normalized.includes(trimmed)) {
-      throw new DomainError(
-        'ENTRADA_INVALIDA',
-        'A senha não pode conter seu nome ou seu e-mail.',
-      );
+      throw new DomainError('ENTRADA_INVALIDA', 'A senha não pode conter seu nome ou seu e-mail.');
     }
   }
 }

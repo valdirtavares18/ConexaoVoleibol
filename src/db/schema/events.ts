@@ -122,9 +122,6 @@ export const eventParticipants = pgTable(
       sql`waitlist_position is null or waitlist_position > 0`,
     ),
     // Slot e posição de espera são mutuamente exclusivos.
-    check(
-      'event_slot_xor_waitlist',
-      sql`confirmed_slot is null or waitlist_position is null`,
-    ),
+    check('event_slot_xor_waitlist', sql`confirmed_slot is null or waitlist_position is null`),
   ],
 );

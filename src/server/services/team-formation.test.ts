@@ -73,13 +73,18 @@ describe.skipIf(!available)('formação de times ligada ao banco (§10)', () => 
 
     // 18 atletas com níveis variados e uma posição principal cada.
     const levels = [5, 4.5, 4.5, 4, 4, 4, 3.5, 3.5, 3.5, 3, 3, 3, 2.5, 2.5, 2, 2, 1.5, 1];
-    const positions = ['levantador', 'ponteiro', 'central', 'oposto', 'libero', 'ponteiro'] as const;
+    const positions = [
+      'levantador',
+      'ponteiro',
+      'central',
+      'oposto',
+      'libero',
+      'ponteiro',
+    ] as const;
 
     const created = await db
       .insert(athletes)
-      .values(
-        levels.map((_, i) => ({ fullName: `Atleta ${String(i + 1).padStart(2, '0')}` })),
-      )
+      .values(levels.map((_, i) => ({ fullName: `Atleta ${String(i + 1).padStart(2, '0')}` })))
       .returning({ id: athletes.id });
 
     athleteIds = created.map((row) => row.id);
@@ -206,9 +211,9 @@ describe.skipIf(!available)('formação de times ligada ao banco (§10)', () => 
   });
 
   it('atleta não gera nem publica times', async () => {
-    await expect(
-      generateOptionsForEvent(db, { actor: atleta(), eventId }),
-    ).rejects.toThrow(ForbiddenError);
+    await expect(generateOptionsForEvent(db, { actor: atleta(), eventId })).rejects.toThrow(
+      ForbiddenError,
+    );
 
     await expect(
       publishFormation(db, {
@@ -249,10 +254,7 @@ describe.skipIf(!available)('formação de times ligada ao banco (§10)', () => 
 
     expect(second.version).toBe(2);
 
-    const all = await db
-      .select()
-      .from(teamFormations)
-      .where(eq(teamFormations.eventId, eventId));
+    const all = await db.select().from(teamFormations).where(eq(teamFormations.eventId, eventId));
 
     // Versão anterior preservada, não apagada.
     expect(all).toHaveLength(2);

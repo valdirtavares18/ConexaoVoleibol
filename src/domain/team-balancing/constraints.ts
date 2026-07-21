@@ -99,8 +99,10 @@ export function buildConstraintIndex(
 
     // "Separar" se propaga para os grupos inteiros: se A deve ficar longe de B
     // e B está obrigado a jogar com C, então A também não pode jogar com C.
-    const membersA = groupA !== undefined ? (togetherGroups[groupA] as readonly string[]) : [constraint.playerAId];
-    const membersB = groupB !== undefined ? (togetherGroups[groupB] as readonly string[]) : [constraint.playerBId];
+    const membersA =
+      groupA !== undefined ? (togetherGroups[groupA] as readonly string[]) : [constraint.playerAId];
+    const membersB =
+      groupB !== undefined ? (togetherGroups[groupB] as readonly string[]) : [constraint.playerBId];
 
     for (const a of membersA) {
       for (const b of membersB) {

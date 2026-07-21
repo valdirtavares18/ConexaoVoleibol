@@ -82,9 +82,7 @@ export function perSkillSummaries(
  */
 export function rankWiseCost(assignment: Assignment, ctx: EvaluationContext): number {
   const sorted = assignment.map((team) =>
-    team
-      .map((id) => ctx.strengths.get(id)?.value ?? 0)
-      .sort((a, b) => b - a),
+    team.map((id) => ctx.strengths.get(id)?.value ?? 0).sort((a, b) => b - a),
   );
 
   const maxSize = Math.max(0, ...sorted.map((team) => team.length));

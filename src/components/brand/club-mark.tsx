@@ -88,9 +88,7 @@ export function ClubWordmark({
         >
           Conexão Voleibol Alegrete
         </span>
-        <span
-          className={`block text-xs ${onDark ? 'text-cva-blue-100' : 'text-cva-text-muted'}`}
-        >
+        <span className={`block text-xs ${onDark ? 'text-cva-blue-100' : 'text-cva-text-muted'}`}>
           CVA Gestão
         </span>
       </span>

@@ -86,7 +86,11 @@ export async function buildBalancingContext(
 
   // --- Atletas confirmados ------------------------------------------------
   const confirmed = await db
-    .select({ athleteId: eventParticipants.athleteId, name: athletes.fullName, nickname: athletes.nickname })
+    .select({
+      athleteId: eventParticipants.athleteId,
+      name: athletes.fullName,
+      nickname: athletes.nickname,
+    })
     .from(eventParticipants)
     .innerJoin(athletes, eq(athletes.id, eventParticipants.athleteId))
     .where(
@@ -98,9 +102,7 @@ export async function buildBalancingContext(
     );
 
   const athleteIds = confirmed.map((row) => row.athleteId);
-  const displayNames = new Map(
-    confirmed.map((row) => [row.athleteId, row.nickname ?? row.name]),
-  );
+  const displayNames = new Map(confirmed.map((row) => [row.athleteId, row.nickname ?? row.name]));
 
   if (athleteIds.length === 0) {
     return {
@@ -517,7 +519,12 @@ export interface PublishedFormation {
   status: string;
   publishedAt: Date | null;
   reviewReason: string | null;
-  teams: { index: number; name: string; colorToken: string; members: { id: string; displayName: string }[] }[];
+  teams: {
+    index: number;
+    name: string;
+    colorToken: string;
+    members: { id: string; displayName: string }[];
+  }[];
 }
 
 /** Formação publicada de um evento, com os nomes já resolvidos para exibição. */

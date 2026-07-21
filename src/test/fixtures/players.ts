@@ -36,9 +36,7 @@ export function makePlayer(
 
 /** 18 atletas com níveis variados — o cenário padrão de um encontro do CVA. */
 export function makeEighteenPlayers(): BalancingPlayer[] {
-  const levels = [
-    5, 4.5, 4.5, 4, 4, 4, 3.5, 3.5, 3.5, 3, 3, 3, 2.5, 2.5, 2, 2, 1.5, 1,
-  ] as const;
+  const levels = [5, 4.5, 4.5, 4, 4, 4, 3.5, 3.5, 3.5, 3, 3, 3, 2.5, 2.5, 2, 2, 1.5, 1] as const;
 
   const positions: PositionCode[] = [
     'levantador',

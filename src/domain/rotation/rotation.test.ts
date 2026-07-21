@@ -179,9 +179,7 @@ describe('rodízio — empate (§11.3)', () => {
 
   it('recusa um time fora de quadra como escolha do empate', () => {
     const state = startSession(TEAMS);
-    expect(() => completeMatch(state, tie(), { stayingTeamIdOnTie: 'C' })).toThrow(
-      RotationError,
-    );
+    expect(() => completeMatch(state, tie(), { stayingTeamIdOnTie: 'C' })).toThrow(RotationError);
   });
 });
 

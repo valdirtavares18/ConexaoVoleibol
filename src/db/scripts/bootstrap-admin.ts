@@ -44,7 +44,9 @@ async function main(): Promise<void> {
   const args = parseArgs();
   const rl = createInterface({ input: process.stdin, output: process.stdout });
 
-  const email = (args.email ?? (await rl.question('E-mail do administrador: '))).trim().toLowerCase();
+  const email = (args.email ?? (await rl.question('E-mail do administrador: ')))
+    .trim()
+    .toLowerCase();
   const name = (args.name ?? (await rl.question('Nome do administrador: '))).trim();
   rl.close();
 

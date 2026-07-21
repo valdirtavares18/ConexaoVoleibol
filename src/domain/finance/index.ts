@@ -37,9 +37,7 @@ export function settleEvent(input: EventSettlementInput): EventSettlement {
       .map((charge) => charge.amountPaidCents),
   );
 
-  const pendingLines = billable.filter(
-    (charge) => charge.amountDueCents > charge.amountPaidCents,
-  );
+  const pendingLines = billable.filter((charge) => charge.amountDueCents > charge.amountPaidCents);
 
   const pendingCents = addCents(
     ...pendingLines.map((charge) => subtractCents(charge.amountDueCents, charge.amountPaidCents)),
@@ -76,11 +74,7 @@ export function settleEvent(input: EventSettlementInput): EventSettlement {
   };
 }
 
-function deriveStatus(
-  received: Cents,
-  pending: Cents,
-  expected: Cents,
-): EventFinancialStatus {
+function deriveStatus(received: Cents, pending: Cents, expected: Cents): EventFinancialStatus {
   if (expected === 0) return received === 0 ? 'aberto' : 'fechado';
   if (pending === 0) return 'fechado';
   if (received === 0) return 'aberto';
@@ -131,14 +125,11 @@ export function applyPayment(line: ChargeLine, amountCents: Cents): ChargeLine {
 
   const total = addCents(line.amountPaidCents, amountCents);
   if (total > line.amountDueCents) {
-    throw new ConflictError(
-      'O valor recebido ultrapassa o valor devido por este atleta.',
-      {
-        participantId: line.participantId,
-        dueCents: line.amountDueCents,
-        attemptedCents: total,
-      },
-    );
+    throw new ConflictError('O valor recebido ultrapassa o valor devido por este atleta.', {
+      participantId: line.participantId,
+      dueCents: line.amountDueCents,
+      attemptedCents: total,
+    });
   }
 
   return {
@@ -153,9 +144,7 @@ export function applyPayment(line: ChargeLine, amountCents: Cents): ChargeLine {
  * Receita esperada nunca vira dinheiro disponível.
  */
 export function cashBalance(transactions: readonly CashTransaction[]): Cents {
-  return addCents(
-    ...transactions.filter((t) => t.settled).map((t) => t.amountCents),
-  );
+  return addCents(...transactions.filter((t) => t.settled).map((t) => t.amountCents));
 }
 
 /** Ajuste manual de caixa: exige motivo, sempre (§13.4). */
@@ -190,8 +179,7 @@ export function buildManualAdjustment(params: {
 // ---------------------------------------------------------------------------
 
 export type ExtraChargeMode =
-  | { kind: 'por_pessoa'; valuePerPersonCents: Cents }
-  | { kind: 'total_rateado'; totalCents: Cents };
+  { kind: 'por_pessoa'; valuePerPersonCents: Cents } | { kind: 'total_rateado'; totalCents: Cents };
 
 /**
  * Rateio de uma confraternização. No modo rateado, os centavos de resto são

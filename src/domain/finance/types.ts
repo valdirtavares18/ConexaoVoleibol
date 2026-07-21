@@ -1,13 +1,7 @@
 import type { Cents } from '@/domain/shared/money';
 
 /** §13.2 — situação da cobrança de um participante. */
-export const PAYMENT_STATUSES = [
-  'pendente',
-  'pago',
-  'parcial',
-  'dispensado',
-  'estornado',
-] as const;
+export const PAYMENT_STATUSES = ['pendente', 'pago', 'parcial', 'dispensado', 'estornado'] as const;
 
 export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 
@@ -15,11 +9,7 @@ export const PAYMENT_METHODS = ['pix', 'dinheiro', 'outro'] as const;
 export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
 
 /** §13.3 — situação financeira de um evento. */
-export const EVENT_FINANCIAL_STATUSES = [
-  'aberto',
-  'parcialmente_recebido',
-  'fechado',
-] as const;
+export const EVENT_FINANCIAL_STATUSES = ['aberto', 'parcialmente_recebido', 'fechado'] as const;
 
 export type EventFinancialStatus = (typeof EVENT_FINANCIAL_STATUSES)[number];
 

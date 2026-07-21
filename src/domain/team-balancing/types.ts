@@ -183,10 +183,7 @@ export interface FormationAlert {
 }
 
 export type BalancingStrategy =
-  | 'equilibrio_maximo'
-  | 'equilibrio_com_afinidades'
-  | 'variacao_social'
-  | 'cobertura_de_posicoes';
+  'equilibrio_maximo' | 'equilibrio_com_afinidades' | 'variacao_social' | 'cobertura_de_posicoes';
 
 export interface FormationOption {
   strategy: BalancingStrategy;

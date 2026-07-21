@@ -21,7 +21,7 @@ export default async function EntrarPage() {
   return (
     <main className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,520px)]">
       {/* Painel da marca — some no celular, onde o espaço é do formulário. */}
-      <section className="relative hidden overflow-hidden bg-cva-navy-950 lg:flex lg:flex-col lg:justify-between lg:p-12">
+      <section className="bg-cva-navy-950 relative hidden overflow-hidden lg:flex lg:flex-col lg:justify-between lg:p-12">
         <div className="cva-stripes absolute inset-0 opacity-60" aria-hidden="true" />
 
         <div className="relative">
@@ -29,20 +29,20 @@ export default async function EntrarPage() {
         </div>
 
         <div className="relative max-w-md">
-          <h1 className="text-4xl font-bold leading-tight tracking-tight text-white">
+          <h1 className="text-4xl leading-tight font-bold tracking-tight text-white">
             Conexão Voleibol Alegrete
           </h1>
-          <p className="mt-4 text-lg text-cva-blue-100">
-            Times equilibrados, rodízio organizado e o caixa do grupo em ordem — tudo em um
-            lugar só.
+          <p className="text-cva-blue-100 mt-4 text-lg">
+            Times equilibrados, rodízio organizado e o caixa do grupo em ordem — tudo em um lugar
+            só.
           </p>
-          <p className="mt-8 flex items-center gap-2 text-sm text-cva-gold-500">
+          <p className="text-cva-gold-500 mt-8 flex items-center gap-2 text-sm">
             <span aria-hidden="true">★★★</span>
             <span className="text-cva-blue-100">Desde 2023 · Apenas vôlei e amizades</span>
           </p>
         </div>
 
-        <p className="relative text-xs text-cva-blue-100/70">
+        <p className="text-cva-blue-100/70 relative text-xs">
           Sistema interno do grupo. O acesso é liberado por um administrador.
         </p>
       </section>
@@ -53,12 +53,10 @@ export default async function EntrarPage() {
             <ClubMark size="lg" priority />
           </div>
 
-          <h2 className="mt-6 text-2xl font-bold tracking-tight text-cva-navy-900 lg:mt-0">
+          <h2 className="text-cva-navy-900 mt-6 text-2xl font-bold tracking-tight lg:mt-0">
             Entrar no CVA Gestão
           </h2>
-          <p className="mt-1.5 text-sm text-cva-text-muted">
-            Use o e-mail cadastrado no grupo.
-          </p>
+          <p className="text-cva-text-muted mt-1.5 text-sm">Use o e-mail cadastrado no grupo.</p>
 
           <div className="mt-8">
             <SignInForm />

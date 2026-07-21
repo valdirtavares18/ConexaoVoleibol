@@ -99,7 +99,10 @@ export const matches = pgTable(
     uniqueIndex('match_number_unique').on(table.sessionId, table.matchNumber),
     index('match_session_idx').on(table.sessionId, table.matchNumber),
     check('match_teams_distinct', sql`left_team_id <> right_team_id`),
-    check('match_score_non_negative', sql`(left_score is null or left_score >= 0) and (right_score is null or right_score >= 0)`),
+    check(
+      'match_score_non_negative',
+      sql`(left_score is null or left_score >= 0) and (right_score is null or right_score >= 0)`,
+    ),
     check(
       'match_override_needs_justification',
       sql`leave_reason <> 'override_manual' or (override_justification is not null and length(trim(override_justification)) >= 3)`,

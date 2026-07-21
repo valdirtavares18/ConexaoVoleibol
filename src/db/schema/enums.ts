@@ -34,11 +34,7 @@ export const positionCodeEnum = pgEnum('position_code', [
 ]);
 
 /** Como o atleta se relaciona com uma posição. */
-export const positionRoleEnum = pgEnum('position_role', [
-  'principal',
-  'secundaria',
-  'indesejada',
-]);
+export const positionRoleEnum = pgEnum('position_role', ['principal', 'secundaria', 'indesejada']);
 
 export const skillCodeEnum = pgEnum('skill_code', [
   'saque',

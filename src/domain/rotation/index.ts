@@ -259,9 +259,7 @@ export function previewNextMatch(
   const forced = forcedLeavingTeam(state, config);
 
   if (forced) {
-    const staying = (
-      forced === state.leftTeamId ? state.rightTeamId : state.leftTeamId
-    ) as TeamId;
+    const staying = (forced === state.leftTeamId ? state.rightTeamId : state.leftTeamId) as TeamId;
 
     return {
       certain: true,

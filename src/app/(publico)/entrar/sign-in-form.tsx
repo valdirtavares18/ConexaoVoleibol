@@ -5,7 +5,8 @@ import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
-import { EMPTY_AUTH_STATE, signInAction } from '@/server/auth/actions';
+import { EMPTY_AUTH_STATE } from '@/lib/action-state';
+import { signInAction } from '@/server/auth/actions';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -26,7 +27,7 @@ export function SignInForm() {
         // `role="alert"` faz o leitor de tela anunciar a falha sem precisar de foco.
         <p
           role="alert"
-          className="rounded-md border border-cva-danger/30 bg-cva-danger-soft px-3 py-2.5 text-sm text-cva-danger"
+          className="border-cva-danger/30 bg-cva-danger-soft text-cva-danger rounded-md border px-3 py-2.5 text-sm"
         >
           {state.error}
         </p>
@@ -57,13 +58,13 @@ export function SignInForm() {
       <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-sm">
         <Link
           href="/recuperar-acesso"
-          className="text-cva-blue-700 underline underline-offset-4 hover:text-cva-navy-900"
+          className="text-cva-blue-700 hover:text-cva-navy-900 underline underline-offset-4"
         >
           Esqueci minha senha
         </Link>
         <Link
           href="/cadastro"
-          className="text-cva-blue-700 underline underline-offset-4 hover:text-cva-navy-900"
+          className="text-cva-blue-700 hover:text-cva-navy-900 underline underline-offset-4"
         >
           Quero entrar no grupo
         </Link>

@@ -64,24 +64,168 @@ interface DemoAthlete {
 
 /** 18 atletas fictícios com níveis, posições e perfis variados. */
 const DEMO_ATHLETES: DemoAthlete[] = [
-  { name: 'Adriano Bueno', nickname: 'Dricco', shirt: 1, primary: 'levantador', secondary: ['oposto'], overall: 4.5, provisional: false },
-  { name: 'Bruno Cardoso', nickname: 'Bruninho', shirt: 2, primary: 'ponteiro', secondary: ['oposto'], overall: 5, provisional: false },
-  { name: 'Caio Ferreira', nickname: 'Caio', shirt: 3, primary: 'central', secondary: [], overall: 4, provisional: false },
-  { name: 'Diego Nunes', nickname: 'Diego', shirt: 4, primary: 'oposto', secondary: ['ponteiro'], overall: 4.5, provisional: false },
-  { name: 'Eduardo Lima', nickname: 'Dudu', shirt: 5, primary: 'libero', secondary: [], overall: 4, provisional: false },
-  { name: 'Fábio Rocha', nickname: 'Fabinho', shirt: 6, primary: 'ponteiro', secondary: ['central'], overall: 3.5, provisional: false },
-  { name: 'Gustavo Peixoto', nickname: 'Guto', shirt: 7, primary: 'levantador', secondary: ['libero'], overall: 3.5, provisional: false },
-  { name: 'Henrique Dias', nickname: 'Rique', shirt: 8, primary: 'central', secondary: ['oposto'], overall: 3.5, provisional: false },
-  { name: 'Igor Menezes', nickname: 'Igor', shirt: 9, primary: 'ponteiro', secondary: [], overall: 3, provisional: false },
-  { name: 'João Vitor Alves', nickname: 'JV', shirt: 10, primary: 'oposto', secondary: ['ponteiro'], overall: 3, provisional: false },
-  { name: 'Kleber Antunes', nickname: 'Kleber', shirt: 11, primary: 'central', secondary: [], overall: 3, provisional: false },
-  { name: 'Leandro Muniz', nickname: 'Leo', shirt: 12, primary: 'levantador', secondary: ['ponteiro'], overall: 3, provisional: true },
-  { name: 'Marcelo Prates', nickname: 'Marcelo', shirt: 13, primary: 'ponteiro', secondary: ['libero'], overall: 2.5, provisional: false },
-  { name: 'Nelson Barros', nickname: 'Nelson', shirt: 14, primary: 'libero', secondary: [], overall: 2.5, provisional: false },
-  { name: 'Otávio Ramos', nickname: 'Otávio', shirt: 15, primary: 'central', secondary: ['ponteiro'], overall: 2.5, provisional: true },
-  { name: 'Paulo Ricardo Souza', nickname: 'PR', shirt: 16, primary: 'ponteiro', secondary: [], overall: 2, provisional: false },
-  { name: 'Rafael Coelho', nickname: 'Rafa', shirt: 17, primary: 'oposto', secondary: ['central'], overall: 2, provisional: true },
-  { name: 'Sérgio Vasques', nickname: 'Serginho', shirt: 18, primary: 'coringa', secondary: ['libero'], overall: 1.5, provisional: false },
+  {
+    name: 'Adriano Bueno',
+    nickname: 'Dricco',
+    shirt: 1,
+    primary: 'levantador',
+    secondary: ['oposto'],
+    overall: 4.5,
+    provisional: false,
+  },
+  {
+    name: 'Bruno Cardoso',
+    nickname: 'Bruninho',
+    shirt: 2,
+    primary: 'ponteiro',
+    secondary: ['oposto'],
+    overall: 5,
+    provisional: false,
+  },
+  {
+    name: 'Caio Ferreira',
+    nickname: 'Caio',
+    shirt: 3,
+    primary: 'central',
+    secondary: [],
+    overall: 4,
+    provisional: false,
+  },
+  {
+    name: 'Diego Nunes',
+    nickname: 'Diego',
+    shirt: 4,
+    primary: 'oposto',
+    secondary: ['ponteiro'],
+    overall: 4.5,
+    provisional: false,
+  },
+  {
+    name: 'Eduardo Lima',
+    nickname: 'Dudu',
+    shirt: 5,
+    primary: 'libero',
+    secondary: [],
+    overall: 4,
+    provisional: false,
+  },
+  {
+    name: 'Fábio Rocha',
+    nickname: 'Fabinho',
+    shirt: 6,
+    primary: 'ponteiro',
+    secondary: ['central'],
+    overall: 3.5,
+    provisional: false,
+  },
+  {
+    name: 'Gustavo Peixoto',
+    nickname: 'Guto',
+    shirt: 7,
+    primary: 'levantador',
+    secondary: ['libero'],
+    overall: 3.5,
+    provisional: false,
+  },
+  {
+    name: 'Henrique Dias',
+    nickname: 'Rique',
+    shirt: 8,
+    primary: 'central',
+    secondary: ['oposto'],
+    overall: 3.5,
+    provisional: false,
+  },
+  {
+    name: 'Igor Menezes',
+    nickname: 'Igor',
+    shirt: 9,
+    primary: 'ponteiro',
+    secondary: [],
+    overall: 3,
+    provisional: false,
+  },
+  {
+    name: 'João Vitor Alves',
+    nickname: 'JV',
+    shirt: 10,
+    primary: 'oposto',
+    secondary: ['ponteiro'],
+    overall: 3,
+    provisional: false,
+  },
+  {
+    name: 'Kleber Antunes',
+    nickname: 'Kleber',
+    shirt: 11,
+    primary: 'central',
+    secondary: [],
+    overall: 3,
+    provisional: false,
+  },
+  {
+    name: 'Leandro Muniz',
+    nickname: 'Leo',
+    shirt: 12,
+    primary: 'levantador',
+    secondary: ['ponteiro'],
+    overall: 3,
+    provisional: true,
+  },
+  {
+    name: 'Marcelo Prates',
+    nickname: 'Marcelo',
+    shirt: 13,
+    primary: 'ponteiro',
+    secondary: ['libero'],
+    overall: 2.5,
+    provisional: false,
+  },
+  {
+    name: 'Nelson Barros',
+    nickname: 'Nelson',
+    shirt: 14,
+    primary: 'libero',
+    secondary: [],
+    overall: 2.5,
+    provisional: false,
+  },
+  {
+    name: 'Otávio Ramos',
+    nickname: 'Otávio',
+    shirt: 15,
+    primary: 'central',
+    secondary: ['ponteiro'],
+    overall: 2.5,
+    provisional: true,
+  },
+  {
+    name: 'Paulo Ricardo Souza',
+    nickname: 'PR',
+    shirt: 16,
+    primary: 'ponteiro',
+    secondary: [],
+    overall: 2,
+    provisional: false,
+  },
+  {
+    name: 'Rafael Coelho',
+    nickname: 'Rafa',
+    shirt: 17,
+    primary: 'oposto',
+    secondary: ['central'],
+    overall: 2,
+    provisional: true,
+  },
+  {
+    name: 'Sérgio Vasques',
+    nickname: 'Serginho',
+    shirt: 18,
+    primary: 'coringa',
+    secondary: ['libero'],
+    overall: 1.5,
+    provisional: false,
+  },
 ];
 
 /** Nota de fundamento variando de forma determinística ao redor da nota geral. */
@@ -179,7 +323,8 @@ async function seedAthletes(db: PostgresJsDatabase): Promise<string[]> {
         status: 'ativo',
         athleteNotes: index % 5 === 0 ? 'Prefiro jogar na entrada de rede.' : null,
         adminNotes: index === 12 ? 'Costuma avisar em cima da hora quando não vem.' : null,
-        healthRestrictions: index === 4 ? 'Tendinite no ombro direito — evitar saque viagem.' : null,
+        healthRestrictions:
+          index === 4 ? 'Tendinite no ombro direito — evitar saque viagem.' : null,
       })
       .returning({ id: athletes.id });
 
@@ -362,7 +507,10 @@ async function seedFinishedEvent(
     displayName: demo.nickname,
     overall: demo.overall,
     skills: Object.fromEntries(
-      SKILL_CODES.map((skill, skillIndex) => [skill, Number(skillFor(demo.overall, skillIndex + i))]),
+      SKILL_CODES.map((skill, skillIndex) => [
+        skill,
+        Number(skillFor(demo.overall, skillIndex + i)),
+      ]),
     ),
     positionRatings: {},
     primaryPosition: demo.primary,
@@ -422,9 +570,9 @@ async function seedFinishedEvent(
 
     teamIds.push(team?.id as string);
 
-    await db.insert(teamMembers).values(
-      members.map((athleteId) => ({ teamId: team?.id as string, formationId, athleteId })),
-    );
+    await db
+      .insert(teamMembers)
+      .values(members.map((athleteId) => ({ teamId: team?.id as string, formationId, athleteId })));
   }
 
   // --- Rodízio, aplicando a regra real ------------------------------------
@@ -471,7 +619,9 @@ async function seedFinishedEvent(
       stayingTeamId: record.stayingTeamId,
       enteringTeamId: record.enteringTeamId,
       leaveReason: record.leaveReason,
-      finishedAt: new Date(`${spec.date}T${String(20 + Math.floor(index / 3)).padStart(2, '0')}:${String((index % 3) * 20 + 15).padStart(2, '0')}:00Z`),
+      finishedAt: new Date(
+        `${spec.date}T${String(20 + Math.floor(index / 3)).padStart(2, '0')}:${String((index % 3) * 20 + 15).padStart(2, '0')}:00Z`,
+      ),
     });
 
     state = next;

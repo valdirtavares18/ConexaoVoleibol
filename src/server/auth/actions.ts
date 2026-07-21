@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { db } from '@/db/client';
 import { users } from '@/db/schema';
 import { isDomainError } from '@/domain/shared/errors';
+import type { AuthFormState } from '@/lib/action-state';
 import { verifyPassword } from './password';
 import { consumeRateLimit, clearRateLimit, pruneRateLimits, RATE_LIMITS } from './rate-limit';
 import { createSession, destroySession } from './session';
@@ -20,14 +21,6 @@ const signInSchema = z.object({
     .toLowerCase(),
   password: z.string().min(1, 'Informe a sua senha.'),
 });
-
-export interface AuthFormState {
-  error: string | null;
-  /** Erros por campo, para associação com o input via `aria-describedby`. */
-  fieldErrors: Partial<Record<'email' | 'password', string>>;
-}
-
-export const EMPTY_AUTH_STATE: AuthFormState = { error: null, fieldErrors: {} };
 
 /**
  * Autenticação por e-mail e senha.

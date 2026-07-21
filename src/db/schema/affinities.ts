@@ -47,11 +47,7 @@ export const affinities = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
-    uniqueIndex('affinity_direction_unique').on(
-      table.fromAthleteId,
-      table.toAthleteId,
-      table.type,
-    ),
+    uniqueIndex('affinity_direction_unique').on(table.fromAthleteId, table.toAthleteId, table.type),
     index('affinity_from_idx').on(table.fromAthleteId),
     index('affinity_to_idx').on(table.toAthleteId),
     // Restrições obrigatórias são consultadas a cada geração de times.

@@ -9,11 +9,7 @@
 export type Role = 'admin' | 'atleta';
 
 export type UserStatus =
-  | 'aguardando_aprovacao'
-  | 'ativo'
-  | 'ajustes_solicitados'
-  | 'rejeitado'
-  | 'desativado';
+  'aguardando_aprovacao' | 'ativo' | 'ajustes_solicitados' | 'rejeitado' | 'desativado';
 
 export interface Actor {
   userId: string;

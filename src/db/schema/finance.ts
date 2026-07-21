@@ -51,7 +51,10 @@ export const eventCharges = pgTable(
   (table) => [
     uniqueIndex('event_charge_unique').on(table.eventId, table.athleteId),
     index('event_charge_status_idx').on(table.eventId, table.status),
-    check('event_charge_amounts_non_negative', sql`amount_due_cents >= 0 and amount_paid_cents >= 0`),
+    check(
+      'event_charge_amounts_non_negative',
+      sql`amount_due_cents >= 0 and amount_paid_cents >= 0`,
+    ),
     check('event_charge_not_overpaid', sql`amount_paid_cents <= amount_due_cents`),
     check(
       'event_charge_adjustment_needs_reason',
@@ -185,7 +188,10 @@ export const extraEventCharges = pgTable(
   },
   (table) => [
     uniqueIndex('extra_event_charge_unique').on(table.extraEventId, table.athleteId),
-    check('extra_charge_amounts_non_negative', sql`amount_due_cents >= 0 and amount_paid_cents >= 0`),
+    check(
+      'extra_charge_amounts_non_negative',
+      sql`amount_due_cents >= 0 and amount_paid_cents >= 0`,
+    ),
     check('extra_charge_not_overpaid', sql`amount_paid_cents <= amount_due_cents`),
   ],
 );

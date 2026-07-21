@@ -107,11 +107,7 @@ function diffPct(values: Float64Array, count: number): number {
   return ((max - min) / mean) * 100;
 }
 
-function diffPctStrided(
-  values: Float64Array,
-  offset: number,
-  count: number,
-): number {
+function diffPctStrided(values: Float64Array, offset: number, count: number): number {
   let sum = 0;
   let min = Number.POSITIVE_INFINITY;
   let max = Number.NEGATIVE_INFINITY;
@@ -143,15 +139,7 @@ export function createPrimaryCostEvaluator(
   const { playerCount, strength, skills, covers, skillCount, requiredPositionCount } = fast;
 
   return (assignment: Assignment): number => {
-    const {
-      teamStrength,
-      teamSkill,
-      teamCovers,
-      elite,
-      beginner,
-      sorted,
-      teamSizes,
-    } = scratch;
+    const { teamStrength, teamSkill, teamCovers, elite, beginner, sorted, teamSizes } = scratch;
 
     teamStrength.fill(0);
     teamSkill.fill(0);

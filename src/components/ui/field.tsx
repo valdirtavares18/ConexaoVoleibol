@@ -22,13 +22,11 @@ export function Field({ label, error, hint, className, ...props }: FieldProps) {
   const errorId = `${id}-erro`;
   const hintId = `${id}-dica`;
 
-  const describedBy = [error ? errorId : null, hint ? hintId : null]
-    .filter(Boolean)
-    .join(' ');
+  const describedBy = [error ? errorId : null, hint ? hintId : null].filter(Boolean).join(' ');
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm font-medium text-cva-text">
+      <label htmlFor={id} className="text-cva-text text-sm font-medium">
         {label}
       </label>
 
@@ -37,25 +35,23 @@ export function Field({ label, error, hint, className, ...props }: FieldProps) {
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy || undefined}
         className={cn(
-          'h-11 rounded-md border bg-cva-panel px-3 text-base text-cva-text',
+          'bg-cva-panel text-cva-text h-11 rounded-md border px-3 text-base',
           'placeholder:text-cva-text-muted',
           'transition-colors',
-          error
-            ? 'border-cva-danger focus-visible:outline-cva-danger'
-            : 'border-cva-border-strong',
+          error ? 'border-cva-danger focus-visible:outline-cva-danger' : 'border-cva-border-strong',
           className,
         )}
         {...props}
       />
 
       {hint ? (
-        <p id={hintId} className="text-xs text-cva-text-muted">
+        <p id={hintId} className="text-cva-text-muted text-xs">
           {hint}
         </p>
       ) : null}
 
       {error ? (
-        <p id={errorId} className="flex items-start gap-1.5 text-xs text-cva-danger">
+        <p id={errorId} className="text-cva-danger flex items-start gap-1.5 text-xs">
           <span aria-hidden="true">⚠</span>
           <span>{error}</span>
         </p>

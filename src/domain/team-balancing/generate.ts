@@ -243,8 +243,7 @@ function selectStrategies(
       used.every(
         (existing) =>
           existing.key !== candidate.key &&
-          assignmentDistance(existing.assignment, candidate.assignment) >=
-            params.minOptionDistance,
+          assignmentDistance(existing.assignment, candidate.assignment) >= params.minOptionDistance,
       ),
     );
 
@@ -258,8 +257,16 @@ function selectStrategies(
   };
 
   claim('equilibrio_maximo', all, (a, b) => a.primary - b.primary);
-  claim('equilibrio_com_afinidades', eligible, (a, b) => b.affinity - a.affinity || a.primary - b.primary);
-  claim('variacao_social', eligible, (a, b) => a.repetition - b.repetition || a.primary - b.primary);
+  claim(
+    'equilibrio_com_afinidades',
+    eligible,
+    (a, b) => b.affinity - a.affinity || a.primary - b.primary,
+  );
+  claim(
+    'variacao_social',
+    eligible,
+    (a, b) => a.repetition - b.repetition || a.primary - b.primary,
+  );
   claim(
     'cobertura_de_posicoes',
     eligible,

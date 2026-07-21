@@ -116,15 +116,15 @@ describe('avaliação oficial — §7 e §23.2', () => {
   });
 
   it('a configuração do clube pode liberar a visão da própria avaliação', () => {
-    expect(
-      canViewOfficialEvaluation(ATLETA, 'a-1', { selfOfficialEvaluationVisible: true }),
-    ).toBe(true);
+    expect(canViewOfficialEvaluation(ATLETA, 'a-1', { selfOfficialEvaluationVisible: true })).toBe(
+      true,
+    );
   });
 
   it('nunca libera a avaliação oficial de terceiros, mesmo com a configuração ativa', () => {
-    expect(
-      canViewOfficialEvaluation(ATLETA, 'a-2', { selfOfficialEvaluationVisible: true }),
-    ).toBe(false);
+    expect(canViewOfficialEvaluation(ATLETA, 'a-2', { selfOfficialEvaluationVisible: true })).toBe(
+      false,
+    );
   });
 
   it('administrador vê a avaliação oficial de qualquer atleta', () => {
@@ -259,9 +259,7 @@ describe('restrição de campos na edição', () => {
   });
 
   it('atleta não edita cadastro de outro', () => {
-    expect(() => restrictAthletePatch(ATLETA, 'a-2', { nickname: 'x' })).toThrow(
-      ForbiddenError,
-    );
+    expect(() => restrictAthletePatch(ATLETA, 'a-2', { nickname: 'x' })).toThrow(ForbiddenError);
   });
 });
 

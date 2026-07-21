@@ -11,8 +11,7 @@ const allIds = (teams: readonly (readonly string[])[]): string[] => teams.flatMa
  * Atleta com **apenas** a nota geral preenchida. Sem fundamentos, a força é
  * exatamente a nota geral, o que torna as aritméticas do teste exatas.
  */
-const onlyOverall = (id: string, overall: number) =>
-  makePlayer(id, overall, { skills: {} });
+const onlyOverall = (id: string, overall: number) => makePlayer(id, overall, { skills: {} });
 
 describe('generateFormations — estrutura (§23.5)', () => {
   it('gera exatamente três times de seis', () => {
@@ -307,18 +306,21 @@ describe('generateFormations — opções (§10.7)', () => {
   });
 
   it('remove opções equivalentes que diferem apenas pelo nome do time', () => {
-    const a = [['x1', 'x2'], ['y1', 'y2']];
-    const b = [['y2', 'y1'], ['x2', 'x1']];
+    const a = [
+      ['x1', 'x2'],
+      ['y1', 'y2'],
+    ];
+    const b = [
+      ['y2', 'y1'],
+      ['x2', 'x1'],
+    ];
     expect(canonicalKey(a)).toBe(canonicalKey(b));
   });
 
   it('marca com `alsoSatisfies` quando uma formação atende a mais de uma intenção', () => {
     // Sem afinidades nem histórico, as três estratégias convergem.
     const result = generateFormations(makeInput(makeEighteenPlayers()));
-    const total = result.options.reduce(
-      (acc, option) => acc + 1 + option.alsoSatisfies.length,
-      0,
-    );
+    const total = result.options.reduce((acc, option) => acc + 1 + option.alsoSatisfies.length, 0);
     expect(total).toBeGreaterThanOrEqual(3);
   });
 });
@@ -490,9 +492,7 @@ describe('generateFormations — cobertura de posições (§10.1)', () => {
     );
 
     const result = generateFormations(makeInput(players));
-    expect(
-      result.options[0]?.alerts.some((a) => a.code === 'posicao_nao_coberta'),
-    ).toBe(true);
+    expect(result.options[0]?.alerts.some((a) => a.code === 'posicao_nao_coberta')).toBe(true);
   });
 });
 
