@@ -340,6 +340,8 @@ export interface PendingRegistration {
   /** Perfil existente com e-mail ou telefone coincidente, se houver. */
   possibleMatchAthleteId: string | null;
   possibleMatchName: string | null;
+  /** Por que este perfil foi sugerido — muda a confiança da sugestão. */
+  possibleMatchReason: 'vinculo_solicitado' | 'email_coincide' | null;
 }
 
 export async function listPendingRegistrations(
@@ -354,12 +356,41 @@ export async function listPendingRegistrations(
       name: users.name,
       email: users.email,
       createdAt: users.createdAt,
-      matchId: sql<
-        string | null
-      >`(select a.id from athletes a where lower(a.email) = lower(${outer(users.email)}) and a.deleted_at is null limit 1)`,
-      matchName: sql<
-        string | null
-      >`(select a.full_name from athletes a where lower(a.email) = lower(${outer(users.email)}) and a.deleted_at is null limit 1)`,
+      /*
+       * O perfil sugerido vem, na ordem:
+       *
+       *  1. do vínculo pendente que o próprio cadastro criou — ele já casou por
+       *     e-mail **ou telefone**, e é a informação mais confiável;
+       *  2. de um perfil com o mesmo e-mail, para cadastros anteriores a esse
+       *     vínculo automático ou criados pelo admin depois.
+       *
+       * Sem o passo 1, quem se cadastrasse com o telefone certo e um e-mail
+       * diferente aparecia aqui sem sugestão nenhuma, e o administrador
+       * acabaria criando um perfil duplicado sem perceber.
+       */
+      matchId: sql<string | null>`coalesce(
+        (select l.athlete_id from athlete_account_links l
+          where l.user_id = ${outer(users.id)} and l.status = 'pendente' limit 1),
+        (select a.id from athletes a
+          where lower(a.email) = lower(${outer(users.email)}) and a.deleted_at is null limit 1)
+      )`,
+      matchName: sql<string | null>`(
+        select a.full_name from athletes a where a.id = coalesce(
+          (select l.athlete_id from athlete_account_links l
+            where l.user_id = ${outer(users.id)} and l.status = 'pendente' limit 1),
+          (select a2.id from athletes a2
+            where lower(a2.email) = lower(${outer(users.email)}) and a2.deleted_at is null limit 1)
+        )
+      )`,
+      matchReason: sql<string | null>`case
+        when exists (select 1 from athlete_account_links l
+          where l.user_id = ${outer(users.id)} and l.status = 'pendente')
+        then 'vinculo_solicitado'
+        when exists (select 1 from athletes a
+          where lower(a.email) = lower(${outer(users.email)}) and a.deleted_at is null)
+        then 'email_coincide'
+        else null
+      end`,
     })
     .from(users)
     .where(and(eq(users.status, 'aguardando_aprovacao'), isNull(users.deletedAt)))
@@ -372,6 +403,7 @@ export async function listPendingRegistrations(
     createdAt: row.createdAt,
     possibleMatchAthleteId: row.matchId,
     possibleMatchName: row.matchName,
+    possibleMatchReason: row.matchReason as PendingRegistration['possibleMatchReason'],
   }));
 }
 

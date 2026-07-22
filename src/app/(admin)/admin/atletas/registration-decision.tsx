@@ -49,12 +49,14 @@ export function RegistrationDecision({
   name,
   matchAthleteId,
   matchName,
+  matchReason,
   athletes,
 }: {
   userId: string;
   name: string;
   matchAthleteId: string | null;
   matchName: string | null;
+  matchReason: 'vinculo_solicitado' | 'email_coincide' | null;
   athletes: { id: string; displayName: string }[];
 }) {
   const [approveState, approveAction] = useActionState(
@@ -88,7 +90,16 @@ export function RegistrationDecision({
           options={[
             { value: NEW_PROFILE, label: `Criar um perfil novo para ${name}` },
             ...(matchAthleteId && matchName
-              ? [{ value: matchAthleteId, label: matchName, hint: 'o e-mail coincide' }]
+              ? [
+                  {
+                    value: matchAthleteId,
+                    label: matchName,
+                    hint:
+                      matchReason === 'vinculo_solicitado'
+                        ? 'a pessoa pediu este vínculo'
+                        : 'o e-mail coincide',
+                  },
+                ]
               : []),
             ...athletes
               .filter((athlete) => athlete.id !== matchAthleteId)

@@ -5,6 +5,7 @@ import { db } from '@/db/client';
 import { getActor } from '@/server/context';
 import { listAthletes, listPendingRegistrations } from '@/server/services/athletes';
 import { AthletesTable } from './athletes-table';
+import { QuickAthleteForm } from './quick-athlete-form';
 import { RegistrationDecision } from './registration-decision';
 
 export const metadata: Metadata = { title: 'Atletas' };
@@ -56,10 +57,27 @@ export default async function AdminAtletasPage() {
 
                   {registration.possibleMatchName ? (
                     <div className="mt-3">
-                      <Callout tone="warning" title="Possível duplicidade">
-                        Já existe um perfil chamado{' '}
-                        <strong>{registration.possibleMatchName}</strong> com o mesmo e-mail.
-                        Vincular a conta a ele evita um cadastro repetido.
+                      <Callout
+                        tone="warning"
+                        title={
+                          registration.possibleMatchReason === 'vinculo_solicitado'
+                            ? 'Pediu para vincular a um perfil'
+                            : 'Possível duplicidade'
+                        }
+                      >
+                        {registration.possibleMatchReason === 'vinculo_solicitado' ? (
+                          <>
+                            No cadastro, os dados bateram com o perfil{' '}
+                            <strong>{registration.possibleMatchName}</strong> (por e-mail ou
+                            telefone). Aprovar e vincular liga a conta a esse perfil, sem duplicar.
+                          </>
+                        ) : (
+                          <>
+                            Já existe um perfil chamado{' '}
+                            <strong>{registration.possibleMatchName}</strong> com o mesmo e-mail.
+                            Vincular a conta a ele evita um cadastro repetido.
+                          </>
+                        )}
                       </Callout>
                     </div>
                   ) : null}
@@ -70,6 +88,7 @@ export default async function AdminAtletasPage() {
                       name={registration.name}
                       matchAthleteId={registration.possibleMatchAthleteId}
                       matchName={registration.possibleMatchName}
+                      matchReason={registration.possibleMatchReason}
                       athletes={athletes
                         .filter((a) => !a.hasAccount)
                         .map((a) => ({ id: a.id, displayName: a.nickname ?? a.fullName }))}
@@ -81,6 +100,8 @@ export default async function AdminAtletasPage() {
           </PanelBody>
         </Panel>
       ) : null}
+
+      <QuickAthleteForm />
 
       <AthletesTable athletes={athletes} />
     </div>

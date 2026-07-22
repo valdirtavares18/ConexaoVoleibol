@@ -1,7 +1,7 @@
 'use server';
 
 import { randomBytes, createHash } from 'node:crypto';
-import { and, eq, gt, isNull } from 'drizzle-orm';
+import { and, eq, gt, isNull, or, sql } from 'drizzle-orm';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -93,14 +93,32 @@ export async function signUpAction(
       createdUserId = userId;
       await tx.insert(userRoles).values({ userId, role: 'atleta' });
 
-      // Perfil gerenciado com o mesmo e-mail ou telefone: propõe o vínculo.
+      /*
+       * Perfil já cadastrado pelo administrador com o mesmo e-mail **ou**
+       * telefone: propõe o vínculo em vez de criar um segundo perfil.
+       *
+       * Antes isto testava telefone *ou* e-mail, nunca os dois: quem informasse
+       * um telefone diferente do que o admin cadastrou não tinha o e-mail
+       * conferido, e acabava com perfil duplicado. Agora qualquer um dos dois
+       * serve — e o e-mail é comparado sem diferenciar maiúsculas.
+       *
+       * Perfis que já têm conta aprovada ficam de fora: um perfil pertence a
+       * uma pessoa só.
+       */
       const [match] = await tx
         .select({ id: athletes.id })
         .from(athletes)
         .where(
           and(
             isNull(athletes.deletedAt),
-            phone ? eq(athletes.phone, phone) : eq(athletes.email, email),
+            or(
+              sql`lower(${athletes.email}) = ${email}`,
+              phone ? eq(athletes.phone, phone) : sql`false`,
+            ),
+            sql`not exists (
+              select 1 from athlete_account_links l
+              where l.athlete_id = ${athletes.id} and l.status = 'aprovado'
+            )`,
           ),
         )
         .limit(1);

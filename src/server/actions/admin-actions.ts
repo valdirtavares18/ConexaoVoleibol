@@ -185,6 +185,57 @@ export async function createAthleteAction(
   return result;
 }
 
+const quickAthleteSchema = z.object({
+  fullName: z.string().trim().min(3, 'Informe o nome completo.'),
+  nickname: z.string().trim().max(40).optional(),
+  phone: z.string().trim().max(20).optional(),
+  email: z.string().trim().email('E-mail inválido.').or(z.literal('')).optional(),
+});
+
+/**
+ * Cadastro rápido de atleta.
+ *
+ * Só o essencial: nome e uma forma de contato. Serve para o administrador
+ * sentar e cadastrar o grupo inteiro de uma vez, sem passar por posições,
+ * avaliação e observações a cada pessoa — isso fica para a tela de edição.
+ *
+ * O contato não é decorativo: é por e-mail **ou** telefone que o sistema
+ * reconhece a pessoa quando ela criar a própria conta, e propõe vincular ao
+ * perfil em vez de criar um duplicado.
+ *
+ * Diferente de `createAthleteAction`, não redireciona: quem está cadastrando
+ * vários seguidos precisa continuar na mesma tela.
+ */
+export async function quickCreateAthleteAction(
+  _previous: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const parsed = quickAthleteSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? 'Dados inválidos.' };
+  }
+
+  const actor = await getActor();
+
+  const result = await run(
+    () =>
+      createAthlete(db, {
+        actor,
+        input: {
+          fullName: parsed.data.fullName,
+          nickname: parsed.data.nickname || null,
+          phone: parsed.data.phone || null,
+          email: parsed.data.email || null,
+          status: 'ativo',
+        },
+      }),
+    `${parsed.data.nickname || parsed.data.fullName} cadastrado.`,
+  );
+
+  revalidatePath('/admin/atletas');
+  return result;
+}
+
 export async function updateAthleteAction(
   _previous: ActionState,
   formData: FormData,
