@@ -42,13 +42,26 @@ async function main(): Promise<void> {
   if (!url) throw new Error('DATABASE_URL não definida.');
 
   const args = parseArgs();
-  const rl = createInterface({ input: process.stdin, output: process.stdout });
 
-  const email = (args.email ?? (await rl.question('E-mail do administrador: ')))
-    .trim()
-    .toLowerCase();
-  const name = (args.name ?? (await rl.question('Nome do administrador: '))).trim();
-  rl.close();
+  // Em ambiente sem terminal (o build da Vercel, por exemplo) não há como
+  // perguntar nada: e-mail e nome vêm de argumentos ou de ADMIN_EMAIL/ADMIN_NAME.
+  // Só abrimos o prompt interativo quando algum dos dois realmente falta.
+  const emailFromEnv = args.email ?? process.env.ADMIN_EMAIL;
+  const nameFromEnv = args.name ?? process.env.ADMIN_NAME;
+
+  let email: string;
+  let name: string;
+  if (emailFromEnv && nameFromEnv) {
+    email = emailFromEnv.trim().toLowerCase();
+    name = nameFromEnv.trim();
+  } else {
+    const rl = createInterface({ input: process.stdin, output: process.stdout });
+    email = (emailFromEnv ?? (await rl.question('E-mail do administrador: ')))
+      .trim()
+      .toLowerCase();
+    name = (nameFromEnv ?? (await rl.question('Nome do administrador: '))).trim();
+    rl.close();
+  }
 
   if (!email.includes('@')) throw new Error('E-mail inválido.');
   if (name.length < 2) throw new Error('Informe um nome.');
